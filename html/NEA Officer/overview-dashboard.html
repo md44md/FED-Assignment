@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEA Officer Dashboard</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/hayder.css">
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <div class="nav-bar">
+            <a href="javascript:history.back()" class="back-btn" aria-label="Go back to previous page">&larr;</a>
+
+            <div class="title">Hawker Centre Management System</div>
+
+            <a href="#" class="dashboard">NEA Officer Dashboard</a>
+        </div>
+    </header>
+    <main>
+        <h1 class="page-name">NEA - Overview Dashboard</h1>
+        <hr class="page-divider">
+
+        <section class="kpi-grid" aria-label="Key performance indicators">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Inspections</div>
+                <div class="kpi-value">128</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Stalls Requiring Re-Inspection</div>
+                <div class="kpi-value">11</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Inspections Due This Week</div>
+                <div class="kpi-value">4</div>
+            </div>
+        </section>
+
+        <section class="action-row">
+            <div class="action-card">
+                <div class="action-top">
+                    <span class="action-icon" aria-hidden="true">📝</span>
+                    <h2 class="action-title">Conduct New Inspection</h2>
+                </div>
+
+                <a class="action-btn" href="inspection-dashboard.html">
+                    Go To Inspection
+                </a>
+            </div>
+
+            <div class="action-card">
+                <div class="action-top">
+                    <span class="action-icon" aria-hidden="true">🕒</span>
+                    <h2 class="action-title">View Hygiene History</h2>
+                </div>
+
+                <a class="action-btn" href="hygiene-grade-history.html">
+                    Go To History
+                </a>
+            </div>
+        </section>
+
+        <section class="recent-section">
+            <h2 class="recent-title">Recent Inspections</h2>
+
+            <div class="recent-table-wrap">
+                <table class="recent-table">
+                    <thead>
+                        <tr>
+                            <th>Stall</th>
+                            <th class="centre">Grade</th>
+                            <th class="right">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tan Ah Beng Chicken Rice</td>
+                            <td class="centre">A</td>
+                            <td class="right">16/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td>Ah Ma Porridge</td>
+                            <td class="centre">B</td>
+                            <td class="right">16/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td>Naziha West Coast</td>
+                            <td class="centre">B</td>
+                            <td class="right">15/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td>Mei Ling Economic Rice</td>
+                            <td class="centre">C</td>
+                            <td class="right">15/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td>Golden Wok Zi Char</td>
+                            <td class="centre">A</td>
+                            <td class="right">14/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td>House Of Kueh</td>
+                            <td class="centre">B</td>
+                            <td class="right">14/01/2026</td>
+                        </tr>
+                        <tr>
+                            <td>Aiman Nasi Padang</td>
+                            <td class="centre">B</td>
+                            <td class="right">14/01/2026</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" aria-label="Pagination">
+                <a class="page-btn active" href="#">1</a>
+                <a class="page-btn" href="#">2</a>
+                <a class="page-btn" href="#">3</a>
+                <a class="page-btn" href="#">…</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2026 National Environment Agency. All rights reserved.</p>
+    </footer>
+</body>
+</html>
