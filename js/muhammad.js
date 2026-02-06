@@ -51,13 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
         cartContainer.innerHTML = "";
 
         if (Object.keys(cart).length === 0) {
-            cartContainer.textContent = "Your cart is empty.";
+            const emptyMsg = document.createElement("p");
+            emptyMsg.className = "empty-message";
+            emptyMsg.textContent = "Your cart is empty.";
+
+            cartContainer.appendChild(emptyMsg);
             return;
         }
 
         for (const stall in cart) {
             const stallHeader = document.createElement("div");
-            stallHeader.classList.add("cart-title");
+            stallHeader.classList.add("stall-header");
             stallHeader.textContent = stall;
             cartContainer.appendChild(stallHeader);
 
