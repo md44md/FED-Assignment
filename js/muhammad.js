@@ -1,32 +1,72 @@
+// Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+    getDatabase,
+    ref,
+    push,
+    set,
+    get,
+    update,
+    remove,
+    child
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// generate temprorary uid
+function getTempUserId() {
+    let id = localStorage.getItem("tempUserId");
+    if (!id) {
+    id = "temp_" + crypto.randomUUID();
+    localStorage.setItem("tempUserId", id);
+  }
+  return id;
+}
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBukUCu_LAoZE9X4nORQAcKrb1Pe9By8X8",
+    authDomain: "fed-assignment-ffb90.firebaseapp.com",
+    databaseURL: "https://fed-assignment-ffb90-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "fed-assignment-ffb90",
+    storageBucket: "fed-assignment-ffb90.firebasestorage.app",
+    messagingSenderId: "336842942112",
+    appId: "1:336842942112:web:3e0c6f4646bf7e23fd8bc5"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
+// MAIN PROGRAM
 document.addEventListener("DOMContentLoaded", () => {
 /// Add to cart functionality 
-    // Read cart from localStorage
-    function getCart() {
-        const saved = localStorage.getItem("cart");
-        if (!saved) return {};
-        try {
-            const parsed = JSON.parse(saved);
-            return typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
-        } catch {
-            return {};
-        }
+    // Read cart from database
+    async function getCart() {
+        const userId = getTempUserId();
+        const cartRef = ref(db, `carts/${userId}`);
+        const snapshot = await get(cartRef);
+
+        return snapshot.exists() ? snapshot.val() : {};
     }
-    // Save cart to localStorage
-    function saveCart(cart) {
-        localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Save cart to database
+    async function saveCart(cart) {
+        const userId = getTempUserId();
+        await set(ref(db, `carts/${userId}`), cart);
     }
+
 
     // Add to cart buttons
     document.querySelectorAll(".add-to-cart").forEach(button => {
-        button.addEventListener("click", () => {
-            const cart = getCart();
+        button.addEventListener("click", async () => {
+            const cart = await getCart();
             const stall = button.dataset.stall;
+            
             const item = {
                 id: button.dataset.id,
                 name: button.dataset.name,
                 price: parseFloat(button.dataset.price),
                 quantity: 1,
-                img: button.dataset.img
+                img: button.dataset.img || "/images/placeholder.png"
             };
 
             if (!cart[stall]) cart[stall] = [];
@@ -34,20 +74,20 @@ document.addEventListener("DOMContentLoaded", () => {
             if (existing) existing.quantity++;
             else cart[stall].push(item);
 
-            saveCart(cart);
+            await saveCart(cart);       
             console.log(cart);
-            // alert(`${item.name} added to cart!`);
+            alert(`${item.name} added to cart!`);
         });
-    });
-
+    }); 
+    
 
 /// Cart page functionality
     const cartContainer = document.querySelector(".cart-container");
     if (!cartContainer) return;
 
     // Display cart cards
-    function renderAllCarts() {
-        const cart = JSON.parse(localStorage.getItem("cart")) || {};
+    async function renderAllCarts() {
+        const cart = await getCart();
         cartContainer.innerHTML = "";
 
         if (Object.keys(cart).length === 0) {
@@ -70,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 card.className = "cart-item-card";
 
                 card.innerHTML = `
-                    <img class="cart-item-img" src="${item.img || '/images/placeholder.png'}" alt="${item.name}">
+                    <img class="cart-item-img" src="${item.img}" alt="${item.name}">
                     <div class="cart-item-content">
                         <p class="cart-item-name">${item.name}</p>
 
@@ -96,34 +136,48 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAllCarts();
 
     // Quantity button functionality
-    cartContainer.addEventListener("click", e => {
+    cartContainer.addEventListener("click", async e => {
         const btn = e.target.closest("button");
         if (!btn) return;
 
-        const cart = JSON.parse(localStorage.getItem("cart")) || {};
         const stall = btn.dataset.stall;
         const id = btn.dataset.id;
 
+        // Read cart from Firebase
+        const cart = await getCart();
+
+        if (!cart[stall]) return;
+
+        const item = cart[stall].find(i => i.id === id);
+        if (!item) return;
+
+        // Apply quantity logic
         if (btn.classList.contains("cart-item-increase-btn")) {
-            const item = cart[stall].find(i => i.id === id);
             item.quantity++;
         }
 
         if (btn.classList.contains("cart-item-decrease-btn")) {
-            const item = cart[stall].find(i => i.id === id);
             item.quantity--;
+
             if (item.quantity <= 0) {
                 cart[stall] = cart[stall].filter(i => i.id !== id);
-                if (cart[stall].length === 0) delete cart[stall];
+                if (cart[stall].length === 0) {
+                    delete cart[stall];
+                }
             }
         }
 
         if (btn.classList.contains("cart-item-delete-btn")) {
             cart[stall] = cart[stall].filter(i => i.id !== id);
-            if (cart[stall].length === 0) delete cart[stall];
+            if (cart[stall].length === 0) {
+                delete cart[stall];
+            }
         }
 
-        saveCart(cart);
-        renderAllCarts(); // update cart
-    }); 
+        // Save updated cart back to Firebase
+        await saveCart(cart);
+
+        // Re-render UI
+        renderAllCarts();
+    });
 });
