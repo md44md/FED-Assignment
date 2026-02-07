@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawker Centre Management System - Order Details</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/muhammad.css">
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <div class="nav-bar">
+            <a href="order-history.html" class="back-btn">&larr;</a>
+            <div class="nav-main">
+                <div class="title">Order Details</div>
+            </div>
+            <a href="customer-dashboard.html" class="dashboard">Customer Dashboard</a>
+        </div>
+    </header>
+    <main>
+        <div class="order-details-container">
+            <div class="order-details-info">
+                <p>OrderID: <span id="order-id"></span></p>
+                <p>Date: <span id="order-date"></span></p>
+                <p>Payment method: <span id="payment-method"></span></p>
+                <p>Stall: <span id="stall-name"></span></p>
+            </div>
+            <table class="order-details-items">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody class="order-details-body"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            Total: <span id="total-cost"></span>
+                        </td>
+                    </tr>
+                </tfoot>    
+            </table>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 National Environment Agency. All rights reserved.</p>
+    </footer>
+    <script type="module" src="/js/muhammad.js"></script>
+</body>
+</html>
