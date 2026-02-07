@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stall Owner - Overview</title> 
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/stall-owner.css">
+    <!-- Linked chart.js for chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header section containing branding and navigation -->
+    <header>
+        <!-- NEA Logo -->
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <!-- Navigation bar with back button, title, and brief -->
+        <nav class="nav-bar">
+            <a href="#" class="back-btn">&larr;</a>
+            <div class="nav-main">
+                <div class="title">Stall Overview</div>
+                <div class="subtitle">Monitor your sales and orders in real time</div>
+            </div>
+            <div class="dashboard">Stall Owner Dashboard</a>
+        </nav>
+    </header>
+
+    <!-- Main content area with beige background -->
+    <main class="overview-main">
+        <!-- Entire (below header) page container -->
+        <div class="overview-container">
+            
+            <!-- Current Order Section -->
+
+            <!-- NOTE: This uses hardcoded mock data. Will be replaced with Firebase API calls later -->
+            <section class="current-order-section">
+                <h2>Current Order</h2>
+                
+                <!-- Order details card -->
+                <article class="current-order-card">
+                    <!-- Main dish with quantity -->
+                    <div class="order-item">
+                        <span class="item-name">Wonton Mee ($4.50)</span>
+                        <span class="item-quantity">x2</span>
+                    </div>
+                    
+                    <!-- Additional items/customizations -->
+                    <div class="addons-section">
+                        <h3>Add-ons</h3>
+                        <div class="addon-item">
+                            <span>• Chili Oil</span>
+                            <span>$0.50</span>
+                        </div>
+                        <div class="addon-item">
+                            <span>• Bok Choy</span>
+                            <span>$0.70</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer's special instructions -->
+                    <div class="special-requests">
+                        <strong>Special Requests:</strong><br>
+                        "Make it with love pls"
+                    </div>
+                </article>
+            </section>
+
+            <!-- Orders Table Section -->
+
+            <!-- Displays list of all orders with pagination and filtering -->
+            <section class="orders-section">
+                
+                <!-- Pagination and filter controls -->
+                <div class="orders-header">
+                    <!-- Page navigation buttons -->
+                    <div class="pagination">
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <span>...</span>
+                        <button class="page-btn">520</button>
+                        <button class="page-nav">&lt;&gt;</button>
+                    </div>
+                    
+                    <!-- Filter dropdown for date ranges -->
+                    <select class="filter-dropdown">
+                        <option>Filter ↓</option>
+                        <option>Today</option>
+                        <option>This Week</option>
+                        <option>This Month</option>
+                    </select>
+                </div>
+
+                <!-- Orders data table -->
+
+                <!-- NOTE: This uses hardcoded mock data. Will be replaced with Firebase API calls later -->
+                <div class="orders-table-wrapper">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Phone No.</th>
+                                <th>DateTime</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody">
+                            <!-- Sample order rows -->
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1234</td>
+                                <td>James Teo</td>
+                                <td>8167 4203</td>
+                                <td>01/02/26|18:23</td>
+                                <td>$7.60</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1256</td>
+                                <td>Ludwig van Beethoven</td>
+                                <td>8765 4321</td>
+                                <td>27/03/26|18:27</td>
+                                <td>$5.60</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1334</td>
+                                <td>Jordan Michael</td>
+                                <td>9203 3478</td>
+                                <td>07/11/26|13:61</td>
+                                <td>$4.50</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1111</td>
+                                <td>John Lee</td>
+                                <td>8384 3947</td>
+                                <td>03/04/25|13:23</td>
+                                <td>$13.40</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1230</td>
+                                <td>Xiao Ming</td>
+                                <td>6423 5843</td>
+                                <td>01/02/26|18:21</td>
+                                <td>$4.30</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1190</td>
+                                <td>Hao Bin</td>
+                                <td>8852 0076</td>
+                                <td>18/01/26|23:59</td>
+                                <td>$510.30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Store Finances Chart Section -->
+
+                <!-- Displays financial performance over time -->
+                <section class="store-finances">
+                    <h3>Store Finances</h3>
+                    
+                    <!-- Canvas element for Chart.js to render the graph -->
+                    <canvas id="financesChart"></canvas>
+                    
+                    <!-- Chart legend explaining the line colors -->
+                    <div class="chart-legend">
+                        <span class="legend-item">
+                            <span class="legend-color red"></span> Red = Expenses
+                        </span>
+                        <span class="legend-item">
+                            <span class="legend-color green"></span> Green = Net Profit
+                        </span>
+                    </div>
+                </section>
+            </section>
+        </div>
+
+        <!-- Quick Actions Section -->
+         
+        <!-- Displays queue status and active promotions -->
+        <section class="quick-actions">
+            <!-- Queue Status Display -->
+            <article class="queue-status-box">
+                <div class="queue-label">Queue Status:</div>
+                <div class="queue-value">LONG</div>
+            </article>
+
+            <!-- Current Promotions Display -->
+            <article class="promotions-box">
+                <div class="promotions-header">
+                    <span>Current promotions:</span>
+                    <a href="promotions.html" class="check-promotions">Check Promotions →</a>
+                </div>
+                <div class="promotions-list">
+                    <span>New Year Special</span><br>
+                    <span>New Customer Welcome</span>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 National Environment Agency. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/stall-owner.js"></script>
+</body>
+</html>
