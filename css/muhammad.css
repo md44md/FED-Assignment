@@ -1,3 +1,50 @@
+/* -- Customer Dashboard -- */
+.dashboard-container{
+    margin: 50px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 10px;
+    width: 350px;
+    aspect-ratio: 2/3;
+    background-color: #B7CBBF;
+    text-align: center;
+
+    text-decoration: none;
+}
+
+.dashboard-card p{
+    margin-top: 50px;
+    font-size: 36px;
+    color: #585858;
+}
+
+.dashboard-img-wrapper {
+    width: 250px;
+    aspect-ratio: 1 / 1;
+    background-color: white;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-img-img {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
 /* -- Checkout Summary -- */
 .checkout-summary-container{
     margin: 50px;

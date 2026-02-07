@@ -59,17 +59,22 @@ body{
     color: white;
 }
 
-.dashboard {
-    width: 160px;
+.dashboard, .log-out {
     text-align: center;
-    border-left: 2px solid white;    
     padding-top: 15px; 
     padding-bottom: 15px;  
-    padding-left: 20px;
 
     text-decoration: none;
     color: white;
     font-size: 20px;
+}
+.dashboard{
+    width: 160px;
+    border-left: 2px solid white; 
+    padding-left: 20px;   
+}
+.log-out{
+    width: 100px;
 }
 
 footer {
