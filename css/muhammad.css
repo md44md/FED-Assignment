@@ -32,6 +32,25 @@
     text-align: right;
 }
 
+#checkout-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 300px;
+    height: 50px;            
+    margin: 20px auto 0 auto;
+    padding: 12px 0;
+
+    background-color: #6F8879;
+    border-radius: 10px;
+    border: 1px solid #585858; 
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 /* -- Cart -- */
 /* Cart section */
 .cart-checkout-container{

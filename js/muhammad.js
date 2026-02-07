@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             }
 
-            updateCheckoutCard();
+            populateCheckoutStalls();
         }
 
         renderAllCarts();
@@ -244,12 +244,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Checkout rendering
         const selectedStall = getQueryParam("stall");
         const paymentMethod = getQueryParam("payment");
+        const checkoutBtn = document.querySelector("#checkout-btn");
 
         if (selectedStall) {
             // Only run checkout summary if a stall is selected (on checkout page)
             const cart = await getCart();
             const items = cart[selectedStall] || [];
-            const tbody = document.querySelector("#checkout-items-body");
+            const tbody = document.querySelector(".checkout-items-body");
 
             let total = 0;
 
@@ -269,11 +270,49 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Update total
             document.querySelector("#total-cost").textContent = `$${total.toFixed(2)}`;
 
-            // Optional: display Order info
-            document.querySelector("#order-id").textContent = "ORD-" + Math.floor(Math.random() * 1000000);
-            document.querySelector("#order-date").textContent = new Date().toLocaleString();
+            // Display order info
+            const orderId = "ORD-" + Math.floor(Math.random() * 1000000);
+            const orderDate = new Date().toLocaleString();
+
+            document.querySelector("#order-id").textContent = orderId;
+            document.querySelector("#order-date").textContent = orderDate;   
             document.querySelector("#payment-method").textContent = paymentMethod;
             document.querySelector("#stall-name").textContent = selectedStall;
+
+            // Save to firebase when click checkout button
+            checkoutBtn.addEventListener("click", async () => {
+                if (!cart[selectedStall]) {
+                    alert("No items to checkout!");
+                    return;
+                }
+
+                // Prepare items array for Firebase
+                const orderItems = items.map(i => ({
+                    name: i.name,
+                    quantity: i.quantity,
+                    cost: i.price * i.quantity
+                }));
+
+                const orderData = {
+                    orderId,
+                    date: new Date().toISOString(), // use ISO for sorting
+                    stall: selectedStall,
+                    paymentMethod,
+                    total,
+                    items: orderItems
+                };
+
+                // Save under orders/<userId>/<orderId>
+                const userId = getTempUserId();
+                const orderRef = ref(db, `orders/${userId}/${orderId}`);
+                await set(orderRef, orderData);
+
+                alert("Order confirmed!");
+
+                // Clear cart for that stall
+                delete cart[selectedStall];
+                await saveCart(cart);
+            });
         }
     }
 });
