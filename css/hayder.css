@@ -362,13 +362,6 @@
   margin-top: 6px;
 }
 
-.score-select{
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d6d6d6;
-  border-radius: 6px;
-}
-
 /* Remarks and grade */
 .remarks-grid{
   display: grid;
@@ -420,6 +413,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  border: 2px solid #cfcfcf;
+  background: #dfe7e1;
+  border-radius: 6px;
+  padding: 18px 16px;
+  text-align: center;
 }
 
 .grade-card.is-a{ background: #dfe7e1; border-color: #cfcfcf; }
@@ -441,15 +440,6 @@
 
 .primary-btn:hover{
   filter: brightness(0.95);
-}
-
-.grade-card{
-  transition: background 0.2s ease, border-color 0.2s ease;
-  border: 2px solid #cfcfcf;
-  background: #dfe7e1;
-  border-radius: 6px;
-  padding: 18px 16px;
-  text-align: center;
 }
 
 .grade-subtitle{
