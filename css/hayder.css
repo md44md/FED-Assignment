@@ -327,7 +327,6 @@
 /* Select field */
 .field-row{
   display: block;
-  grid-template-columns: 160px 320px;
   gap: 12px;
   align-items: center;
 }
