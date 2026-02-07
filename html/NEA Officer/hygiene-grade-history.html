@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEA - Hygiene Grade History</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/hayder.css" />
+</head>
+<body>
+  <header id="siteHeader">
+    <div class="branding">
+      <img src="/images/NEA-logo.png" alt="NEA logo" />
+    </div>
+
+    <div class="nav-bar">
+      <a href="javascript:history.back()" class="back-btn" aria-label="Go back to previous page">&larr;</a>
+      <div class="title">Hawker Centre Management System</div>
+      <a href="#" class="dashboard">NEA Officer Dashboard</a>
+    </div>
+  </header>
+  <main>
+    <div class="page-header" id="pageHeader">
+      <h1 class="page-name">NEA - Hygiene Grade History</h1>
+      <button class="hamburger-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+    </div>
+    <hr class="page-divider" />
+
+    <section class="inspect-section">
+      <div class="filters-grid">
+        <div class="filter-block">
+          <h2 class="section-title">Filter by Stall</h2>
+          <select class="field-control">
+            <option selected>Choose Stall</option>
+            <option>Tan Ah Beng Chicken Rice</option>
+            <option>Ah Ma Porridge</option>
+            <option>Naziha West Coast</option>
+            <option>Mei Ling Economic Rice</option>
+            <option>Golden Wok Zi Char</option>
+            <option>House Of Kueh</option>
+            <option>Aiman Nasi Padang</option>
+          </select>
+        </div>
+
+        <div class="filter-block">
+          <h2 class="section-title">Filter by Grade</h2>
+          <select class="field-control">
+            <option selected>Choose Grade</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+          </select>
+        </div>
+
+        <div class="filter-block">
+          <h2 class="section-title">Date range</h2>
+          <select class="field-control">
+            <option selected>Pick a Date</option>
+            <option>Today</option>
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <section class="inspect-section">
+      <h2 class="section-title">Recent Inspections</h2>
+
+      <div class="recent-table-wrap">
+        <table class="recent-table">
+          <thead>
+            <tr>
+              <th>Stall</th>
+              <th class="centre">Score</th>
+              <th class="centre">Grade</th>
+              <th class="right">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tan Ah Beng Chicken Rice</td>
+              <td class="centre">92</td>
+              <td class="centre"><span class="grade-badge grade-a">A</span></td>
+              <td class="right">16/01/2026</td>
+            </tr>
+            <tr>
+              <td>Ah Ma Porridge</td>
+              <td class="centre">75</td>
+              <td class="centre"><span class="grade-badge grade-c">C</span></td>
+              <td class="right">16/01/2026</td>
+            </tr>
+            <tr>
+              <td>Naziha West Coast</td>
+              <td class="centre">72</td>
+              <td class="centre"><span class="grade-badge grade-b">B</span></td>
+              <td class="right">15/01/2026</td>
+            </tr>
+            <tr>
+              <td>Mei Ling Economic Rice</td>
+              <td class="centre">67</td>
+              <td class="centre"><span class="grade-badge grade-c">C</span></td>
+              <td class="right">15/01/2026</td>
+            </tr>
+            <tr>
+              <td>Golden Wok Zi Char</td>
+              <td class="centre">88</td>
+              <td class="centre"><span class="grade-badge grade-a">A</span></td>
+              <td class="right">14/01/2026</td>
+            </tr>
+            <tr>
+              <td>House Of Kueh</td>
+              <td class="centre">79</td>
+              <td class="centre"><span class="grade-badge grade-b">B</span></td>
+              <td class="right">14/01/2026</td>
+            </tr>
+            <tr>
+              <td>Aiman Nasi Padang</td>
+              <td class="centre">82</td>
+              <td class="centre"><span class="grade-badge grade-b">B</span></td>
+              <td class="right">14/01/2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" aria-label="Pagination">
+        <a class="page-btn active" href="#">1</a>
+        <a class="page-btn" href="#">2</a>
+        <a class="page-btn" href="#">3</a>
+        <a class="page-btn" href="#">…</a>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>© 2026 National Environment Agency. All rights reserved.</p>
+  </footer>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+  <aside class="sidebar" id="sidebar" aria-hidden="true">
+    <nav class="sidebar-nav">
+      <a href="overview-dashboard.html" class="sidebar-link">Overview</a>
+      <a href="inspection-dashboard.html" class="sidebar-link">Inspection Dashboard</a>
+      <a href="hygiene-grade-history.html" class="sidebar-link active">Hygiene History</a>
+    </nav>
+  </aside>
+
+  <script src="/js/hayder.js"></script>
+</body>
+</html>
