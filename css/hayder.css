@@ -487,11 +487,15 @@
   width: min(520px, 100%);
 }
 
+.recent-table-wrap{
+  margin: 20px 20px 10px 20px
+}
+
 .grade-badge{
   display: inline-flex;
-  align-items: centre;
-  justify-content: centre;
-  min-width: 56px;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
   padding: 8px 0;
   border-radius: 6px;
   font-weight: 900;
