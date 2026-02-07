@@ -23,21 +23,41 @@
     border-left: 2px solid white;
 }
 
+/* Page header row (title + hamburger) */
+.page-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px 0px 20px;
+}
+
 /* page name */
 .page-name{
     font-size: 28px;
     font-weight: bold;
-    margin: 20px 0px 20px 20px;
+    margin: 20px 0px;
+}
+
+/* Hamburger (now belongs to page header) */
+.hamburger-btn{
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.hamburger-btn:hover{
+  background: rgba(0,0,0,0.1);
 }
 
 .page-divider{
     border: 0;
     height: 3px;
     background-color: #ccc;
+    margin: 0px 0px
 }
-
-
-
 
 
 /* KPI row */
@@ -75,6 +95,7 @@
   }
 }
 
+
 /* Two action boxes */
 .action-row{
   display: grid;
@@ -108,7 +129,6 @@
   color: #333;
 }
 
-
 .action-btn{
   display: block;
   width: 70%;
@@ -133,7 +153,6 @@
   outline-offset: 3px;
 }
 
-
 @media (max-width: 900px){
   .action-row{
     grid-template-columns: 1fr;
@@ -142,8 +161,6 @@
     width: 100%;
   }
 }
-
-
 
 
 /* Recent inspections */
@@ -184,9 +201,6 @@
   font-weight: 800;
 }
 
-/* Text alignment classes */
-.centre{ text-align: center; }
-.right{ text-align: right; }
 
 /* Pagination buttons */
 .pagination{
@@ -211,4 +225,73 @@
 
 .page-btn.active{
   background: #6F8879;
+}
+
+
+/* Text alignment classes */
+.centre{ text-align: center; }
+.right{ text-align: right; }
+
+
+/* Sidebar */
+.sidebar-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 999;
+}
+
+.sidebar-overlay.open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar{
+  position: fixed;
+  top: 0;
+  right: -340px;
+  width: 320px;
+  height: 100vh;
+  background: #ffffff;
+  border-left: 2px solid #cfcfcf;
+  transition: right 0.2s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar.open{
+  right: 0;
+}
+
+.sidebar-nav{
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-link{
+  padding: 18px;
+  text-decoration: none;
+  color: #333333;
+  font-weight: 700;
+}
+
+.sidebar-link.active{
+  background: #d7e1db;
+  border-left: 6px solid #6F8879;
+}
+
+.sidebar-link:hover{
+  background: #f1f1f1;
+}
+
+@media (max-width: 600px){
+  .sidebar{
+    width: 80vw;
+    right: -85vw;
+  }
 }

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/hayder.css">
 </head>
 <body>
-    <header>
+    <header id="siteHeader">
         <div class="branding">
             <img src="/images/NEA-logo.png" alt="NEA logo">
         </div>
@@ -22,7 +22,10 @@
         </div>
     </header>
     <main>
-        <h1 class="page-name">NEA - Overview Dashboard</h1>
+        <div class="page-header" id="pageHeader">
+            <h1 class="page-name">NEA - Overview Dashboard</h1>
+            <button class="hamburger-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+        </div>
         <hr class="page-divider">
 
         <section class="kpi-grid" aria-label="Key performance indicators">
@@ -129,5 +132,15 @@
     <footer>
         <p>© 2026 National Environment Agency. All rights reserved.</p>
     </footer>
+    <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+    <aside class="sidebar" id="sidebar" aria-hidden="true">
+        <nav class="sidebar-nav">
+            <a href="overview-dashboard.html" class="sidebar-link active">Overview</a>
+            <a href="inspection-dashboard.html" class="sidebar-link">Inspection Dashboard</a>
+            <a href="hygiene-grade-history.html" class="sidebar-link">Hygiene History</a>
+        </nav>
+    </aside>
+
+    <script src="/js/hayder.js"></script>
 </body>
 </html>
