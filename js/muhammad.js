@@ -326,11 +326,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!snapshot.exists()) {
             orderHistoryBody.innerHTML = "<tr><td colspan='5'>No orders found.</td></tr>";
         } else {
-            const orders = snapshot.val();
+            const ordersObj = snapshot.val();
+            // Convert object into array
+            const orders = Object.values(ordersObj);
 
-            for (const orderId in orders) {
-                const order = orders[orderId];
+            // Sort by date (latest first)
+            orders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+            // Render
+            orders.forEach(order => {
                 const tr = document.createElement("tr");
 
                 const detailsBtn = document.createElement("a");
@@ -347,9 +351,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 `;
 
                 tr.querySelector("td:last-child").appendChild(detailsBtn);
-
                 orderHistoryBody.appendChild(tr);
-            }
+            });
         }
     }
 
