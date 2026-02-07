@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-/// Add to cart functionality 
+/// Add to cart page 
     const menuContainer = document.querySelector(".menu-container");
     if (menuContainer){
         // Add to cart buttons
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }); 
     }
 
-/// Cart page functionality
+/// Cart page
     const cartContainer = document.querySelector(".cart-container");
     if (cartContainer) {
 
@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         populateCheckoutStalls();
     }
 
-/// Checkout summary functionality
+/// Checkout summary page
     const checkoutSummaryContainer = document.querySelector(".checkout-summary-container");
     if (checkoutSummaryContainer){
         function getQueryParam(param) {
@@ -313,6 +313,43 @@ document.addEventListener("DOMContentLoaded", async () => {
                 delete cart[selectedStall];
                 await saveCart(cart);
             });
+        }
+    }
+
+    /// Order history page
+    const orderHistoryBody = document.querySelector(".order-history-body");
+    if (orderHistoryBody) {
+        const userId = getTempUserId();
+        const ordersRef = ref(db, `orders/${userId}`);
+        const snapshot = await get(ordersRef);
+
+        if (!snapshot.exists()) {
+            orderHistoryBody.innerHTML = "<tr><td colspan='5'>No orders found.</td></tr>";
+        } else {
+            const orders = snapshot.val();
+
+            for (const orderId in orders) {
+                const order = orders[orderId];
+
+                const tr = document.createElement("tr");
+
+                const detailsBtn = document.createElement("a");
+                detailsBtn.classList.add("details-btn");
+                detailsBtn.textContent = "Details";
+                detailsBtn.href = "#";
+
+                tr.innerHTML = `
+                    <td>${order.orderId}</td>
+                    <td>${new Date(order.date).toLocaleString()}</td>
+                    <td>${order.stall}</td>
+                    <td>$${order.total.toFixed(2)}</td>
+                    <td></td>
+                `;
+
+                tr.querySelector("td:last-child").appendChild(detailsBtn);
+
+                orderHistoryBody.appendChild(tr);
+            }
         }
     }
 });
