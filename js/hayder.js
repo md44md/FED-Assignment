@@ -93,6 +93,7 @@
 
     stallSelect.selectedIndex = 0;
     scoreRange.value = 0;
+    scoreRange.dispatchEvent(new Event("input"));
     if (remarksBox) remarksBox.value = "";
   });
 })();
