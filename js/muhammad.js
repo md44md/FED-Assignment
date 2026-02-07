@@ -36,7 +36,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-// MAIN PROGRAM
+//// MAIN PROGRAM
 document.addEventListener("DOMContentLoaded", () => {
 /// Add to cart functionality 
     // Read cart from database
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartContainer = document.querySelector(".cart-container");
     if (!cartContainer) return;
 
-    // Display cart cards
+    // Render cart cards
     async function renderAllCarts() {
         const cart = await getCart();
         cartContainer.innerHTML = "";
@@ -131,6 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 cartContainer.appendChild(card);
             });
         }
+
+        updateCheckoutCard();
     }
 
     renderAllCarts();
@@ -180,4 +182,54 @@ document.addEventListener("DOMContentLoaded", () => {
         // Re-render UI
         renderAllCarts();
     });
+
+
+    // checkout functionality
+    const stallSelect = document.querySelector("#stall-select");
+    const totalCost = document.querySelector(".total-cost");
+    const placeOrderBtn = document.querySelector(".place-order-btn");
+
+    // Update options inside checkout card
+    async function updateCheckoutCard() {
+        const cart = await getCart();
+        
+        stallSelect.innerHTML = "";
+
+        const stalls = Object.keys(cart);
+        if (stalls.length === 0) {
+            stallSelect.innerHTML = '<option disabled selected>No stalls in cart</option>';
+            totalCost.textContent = "Total: $0.00";
+            placeOrderBtn.href = "#";
+            return;
+        }
+
+        stalls.forEach(stall => {
+            const option = document.createElement("option");
+            option.value = stall;
+            option.textContent = stall;
+            stallSelect.appendChild(option);
+        });
+
+        updateTotal(); 
+    }
+
+    // Update total whenever the user changes the selected stall
+    async function updateTotal() {
+        const cart = await getCart();
+        const selectedStall = stallSelect.value;
+        if (!cart[selectedStall]) return;
+
+        const total = cart[selectedStall].reduce((sum, item) => sum + item.price * item.quantity, 0);
+        totalCost.textContent = `Total: $${total.toFixed(2)}`;
+
+        // Update link to checkout page
+        placeOrderBtn.href = `checkout.html?stall=${encodeURIComponent(selectedStall)}`;
+    }
+
+    // Listen for changes in stall selection
+    stallSelect.addEventListener("change", updateTotal);
+
+    // Call this whenever cart changes or on page load
+    updateCheckoutCard();
+
 });

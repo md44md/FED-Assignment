@@ -22,7 +22,25 @@
         </div>
     </header>
     <main>
-        <div class="cart-container">
+        <div class="cart-checkout-container">
+            <div class="cart-container"></div>
+            <div class="checkout-container">
+                <div class="checkout-card">
+                    <p class="total-cost">Total: $0.00</p>
+                    <div class="selection">
+                        <label for="stall-select">Select Stall:</label>
+                        <select id="stall-select"></select>
+                    </div>
+                    <div class="selection">
+                        <label for="payment-select">Select payment method:</label>
+                        <select id="payment-select">
+                            <option value="Cash">Cash</option>
+                            <option value="Paynow">Paynow</option>
+                        </select>
+                    </div>
+                </div>
+                <a class="place-order-btn" href="checkout.html">Place Order</a>
+            </div>   
         </div>
     </main>
     <footer>
