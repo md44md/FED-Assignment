@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEA - Hygiene Grade History</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/hayder.css" />
+</head>
+
+<body>
+  <header id="siteHeader">
+    <div class="branding">
+      <img src="/images/NEA-logo.png" alt="NEA logo" />
+    </div>
+
+    <div class="nav-bar">
+      <a href="javascript:history.back()" class="back-btn" aria-label="Go back to previous page">&larr;</a>
+      <div class="title">Hawker Centre Management System</div>
+      <a href="#" class="dashboard">NEA Officer Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header" id="pageHeader">
+      <h1 class="page-name">NEA - Hygiene Grade History</h1>
+      <button class="hamburger-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+    </div>
+    <hr class="page-divider" />
+
+    <section class="inspect-section">
+      <div class="filters-grid">
+        <div class="filter-block">
+          <div class="section-title">Filter by Stall</div>
+          <select class="field-control" id="stallFilter">
+            <option value="">All stalls</option>
+          </select>
+        </div>
+
+        <div class="filter-block">
+          <div class="section-title">Filter by Grade</div>
+          <select class="field-control" id="gradeFilter">
+            <option value="">All grades</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+
+        <div class="filter-block">
+          <div class="section-title">Date range</div>
+          <select class="field-control" id="dateFilter">
+            <option value="all">All</option>
+            <option value="today">Today</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <section class="recent-section">
+      <h2 class="recent-title">Recent Inspections</h2>
+
+      <div class="recent-table-wrap">
+        <table class="recent-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>Stall</th>
+              <th class="centre">Score</th>
+              <th class="centre">Grade</th>
+              <th class="right">Date</th>
+            </tr>
+          </thead>
+          <tbody id="historyTbody">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" aria-label="Pagination" id="pager">
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 National Environment Agency. All rights reserved.</p>
+  </footer>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+  <aside class="sidebar" id="sidebar" aria-hidden="true">
+    <nav class="sidebar-nav">
+      <a href="overview-dashboard.html" class="sidebar-link">Overview</a>
+      <a href="inspection-dashboard.html" class="sidebar-link">Inspection Dashboard</a>
+      <a href="hygiene-grade-history.html" class="sidebar-link active">Hygiene History</a>
+    </nav>
+  </aside>
+
+  <script src="/js/hayder-history.js"></script>
+</body>
+</html>
