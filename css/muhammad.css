@@ -73,17 +73,20 @@
     cursor: pointer;
 }
 
-/* -- Checkout Summary -- */
-.checkout-summary-container{
+/* -- Checkout Summary and Order Details -- */
+.checkout-summary-container, 
+.order-details-container{
     margin: 50px;
     font-size: 20px;
     color:#585858;
 }
 
-.checkout-summary-info p{
+.checkout-summary-info p,
+.order-details-info p{
     margin: 10px 0;
 }
 
+.order-details-items,
 .checkout-summary-items {
     width: 100%;
     border-collapse: collapse;  
@@ -91,6 +94,8 @@
     margin-top: 50px;    
 }
 
+.order-details-items th,
+.order-details-items td,
 .checkout-summary-items th,
 .checkout-summary-items td {
     text-align: center; 
@@ -98,10 +103,12 @@
     padding: 10px;
 }
 
+.order-details-items td,
 .checkout-summary-items td {
     border-top: 2px solid #BFBFBF;
 }
 
+.order-details-items tfoot td,
 .checkout-summary-items tfoot td {
     font-weight: bold;
     text-align: right;
