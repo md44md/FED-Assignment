@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawker Centre Management System - Cart</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/muhammad.css">
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <div class="nav-bar">
+            <a href="javascript:history.back()" class="back-btn">&larr;</a>
+            <div class="nav-main">
+                <div class="title">Cart</div>
+            </div>
+            <a href="#" class="dashboard">Customer Dashboard</a>
+        </div>
+    </header>
+    <main>
+        <div class="cart-checkout-container">
+            <div class="cart-container"></div>
+            <div class="checkout-container">
+                <div class="checkout-card">
+                    <p class="total-cost">Total: $0.00</p>
+                    <div class="selection">
+                        <label for="stall-select">Select Stall:</label>
+                        <select id="stall-select"></select>
+                    </div>
+                    <div class="selection">
+                        <label for="payment-select">Select payment method:</label>
+                        <select id="payment-select">
+                            <option value="Cash">Cash</option>
+                            <option value="Paynow">Paynow</option>
+                        </select>
+                    </div>
+                </div>
+                <a class="place-order-btn" href="checkout-summary.html">Place Order</a>
+            </div>   
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 National Environment Agency. All rights reserved.</p>
+    </footer>
+    <script type="module" src="/js/muhammad.js"></script>
+</body>
+</html>
