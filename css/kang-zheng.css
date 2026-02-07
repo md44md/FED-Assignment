@@ -224,34 +224,18 @@
    QUICK ACTIONS SECTION (BOTTOM)
    ============================================ */
 .quick-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    display: flex;  /* NEW: single box */
+    justify-content: center;
 }
 
-.queue-status-box,
 .promotions-box {
     background-color: white;
     padding: 20px;
     border: 2px solid #6F8879;
     border-radius: 8px;
-    text-align: center;
-}
-
-.queue-label {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.queue-value {
-    font-size: 32px;
-    font-weight: bold;
-    color: #6F8879;
-}
-
-.promotions-box {
     text-align: left;
 }
+
 
 .promotions-header {
     display: flex;
