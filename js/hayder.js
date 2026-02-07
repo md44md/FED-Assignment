@@ -40,7 +40,6 @@
 })();
 
 // Inspection Dashboard
-// Inspection Dashboard
 (() => {
   const scoreRange = document.getElementById("scoreRange");
   const scoreValue = document.getElementById("scoreValue");
