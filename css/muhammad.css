@@ -46,6 +46,33 @@
     border-radius: 10px;
 }
 
+/* -- Order History -- */
+.order-history-container{
+    margin: 50px;
+    font-size: 20px;
+    color:#585858;
+}
+
+.order-history-items {
+    width: 100%;
+    border-collapse: collapse;  
+    table-layout: fixed;     
+    margin-top: 50px;    
+}
+
+.order-history-items td {
+    text-align: center; 
+    vertical-align: middle; 
+    padding: 10px;
+    border-top: 2px solid #BFBFBF;
+}
+
+.details-btn{
+    text-decoration: none;
+    color: #585858;
+    cursor: pointer;
+}
+
 /* -- Checkout Summary -- */
 .checkout-summary-container{
     margin: 50px;
