@@ -1,63 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Customer Register</title>
-  <link rel="stylesheet" href="../../css/main.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Customer</title>
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/haobin.css">
 </head>
-<body>
-  <main class="container" style="max-width: 520px; margin: 40px auto; padding: 16px;">
-    <h1>Create Customer Account</h1>
-    <p style="opacity: 0.8; margin-top: 6px;">Register to access your dashboard and submit feedback.</p>
+<body class="auth-page">
+  <header>
+    <div class="branding">
+      <img src="../../images/NEA-logo.png" alt="NEA logo">
+    </div>
 
-    <form id="registerForm" novalidate>
-      <div style="margin: 12px 0;">
-        <label for="fullName"><strong>Full Name</strong></label>
-        <input id="fullName" type="text" autocomplete="name"
-               style="width: 100%; padding: 10px; margin-top: 6px;" />
-        <small id="fullNameErr" style="display:block; margin-top:6px;"></small>
+    <div class="nav-bar">
+      <a href="javascript:history.back()" class="back-btn">&larr;</a>
+      <div class="nav-main">
+        <div class="title">CUSTOMER</div>
       </div>
+      <div style="width:160px;"></div>
+    </div>
+  </header>
 
-      <div style="margin: 12px 0;">
-        <label for="email"><strong>Email</strong></label>
-        <input id="email" type="email" autocomplete="email"
-               style="width: 100%; padding: 10px; margin-top: 6px;" />
-        <small id="emailErr" style="display:block; margin-top:6px;"></small>
-      </div>
+  <main class="auth-main">
+    <div class="auth-wrap">
+      <section class="auth-card">
+        <h2>Sign Up</h2>
 
-      <div style="margin: 12px 0;">
-        <label for="password"><strong>Password</strong></label>
-        <input id="password" type="password" autocomplete="new-password"
-               style="width: 100%; padding: 10px; margin-top: 6px;" />
-        <small id="passwordErr" style="display:block; margin-top:6px;"></small>
-      </div>
+        <form id="registerForm" novalidate>
+          <input id="regName" class="auth-input" type="text" placeholder="Name">
+          <div id="regNameErr" class="auth-error"></div>
 
-      <div style="margin: 12px 0;">
-        <label for="confirmPassword"><strong>Confirm Password</strong></label>
-        <input id="confirmPassword" type="password" autocomplete="new-password"
-               style="width: 100%; padding: 10px; margin-top: 6px;" />
-        <small id="confirmPasswordErr" style="display:block; margin-top:6px;"></small>
-      </div>
+          <input id="regEmail" class="auth-input" type="email" placeholder="Email">
+          <div id="regEmailErr" class="auth-error"></div>
 
-      <div id="formMsg" style="margin: 10px 0;"></div>
+          <input id="regPhone" class="auth-input" type="text" placeholder="Phone Number">
+          <div id="regPhoneErr" class="auth-error"></div>
 
-      <button type="submit" style="width: 100%; padding: 12px; cursor: pointer;">
-        Register
-      </button>
+          <input id="regPassword" class="auth-input" type="password" placeholder="Password">
+          <div id="regPasswordErr" class="auth-error"></div>
 
-      <p style="margin-top: 14px;">
-        Already have an account?
-        <a href="./customer-login.html">Login</a>
-      </p>
-    </form>
+          <div id="regMsg" class="auth-msg"></div>
+
+          <button class="auth-btn" type="submit">Sign up</button>
+        </form>
+      </section>
+
+      <div class="auth-or">Or</div>
+
+      <a class="auth-linkbtn" href="./customer-login.html">Log in</a>
+    </div>
   </main>
 
-  <script src="../../js/auth.js"></script>
-  <script>
-    Auth.initRegisterPage("registerForm", "./customer-login.html");
-  </script>
+  <footer>
+    <p>© 2026 National Environment Agency. All rights reserved.</p>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script>Auth.initCustomerRegister();</script>
 </body>
 </html>
+
 
 
