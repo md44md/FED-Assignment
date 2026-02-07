@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stall Owner - Menu Management</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/kang-zheng.css">
+</head>
+<body>
+    <!-- Header section containing branding and navigation -->
+    <header>
+        <!-- NEA Logo -->
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <!-- Navigation bar with back button, title, and dashboard label -->
+        <nav class="nav-bar">
+            <a href="#" class="back-btn">&larr;</a>
+            <div class="nav-main">
+                <div class="title">Menu Management</div>
+                <div class="subtitle">Manage your menu efficiently</div>
+            </div>
+            <div class="dashboard">Stall Owner Dashboard</div>
+        </nav>
+    </header>
+
+    <!-- Main content area -->
+    <main class="menu-main">
+        
+        <!-- Add dish button + Summary stats -->
+        <section class="menu-top-section">
+            <button class="add-dish-btn" id="addDishBtn">+ Add New Dish</button>
+            
+            <!-- Summary statistics cards -->
+            <div class="menu-stats">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Total Dishes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Active Dishes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Cuisines Available</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search, Filters, and Dish grid -->
+        <section class="menu-container">
+            
+            <!-- Search bar -->
+            <div class="menu-search-bar">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search in products" 
+                    class="search-input"
+                >
+            </div>
+
+            <!-- Filters section -->
+            <div class="menu-filters">
+                <!-- Cuisine filter dropdown -->
+                <div class="filter-group">
+                    <select id="cuisineFilter" class="filter-dropdown">
+                        <option value="all">All Cuisines</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="malay">Malay</option>
+                        <option value="indian">Indian</option>
+                    </select>
+                    <button class="delete-filter-btn" onclick="deleteCuisineOption()">x</button>
+                    <button class="add-filter-btn" id="addCuisineBtn">+</button>
+                    <input 
+                        type="text" 
+                        id="newCuisineInput" 
+                        class="new-filter-input" 
+                        placeholder="New cuisine..." 
+                        style="display: none;"
+                    >
+                </div>
+
+                <!-- Food type filter buttons -->
+                <div class="filter-group">
+                    <button class="filter-btn active" data-type="all">Show All</button>
+                    <button class="filter-btn" data-type="rice">Rice</button>
+                    <button class="filter-btn" data-type="noodles">Noodles</button>
+                    <button class="delete-filter-btn" onclick="deleteSelectedFoodType()">x</button>
+                    <button class="add-filter-btn" id="addFoodTypeBtn">+</button>
+                    <!-- Hidden input for adding new food type -->
+                    <input 
+                        type="text" 
+                        id="newFoodTypeInput" 
+                        class="new-filter-input" 
+                        placeholder="New type..." 
+                        style="display: none;"
+                    >
+                </div>
+            </div>
+
+            <!-- Dish grid -->
+            <!-- NOTE: Using mock/sample data. Will be replaced with Firebase later -->
+            <div class="dish-grid" id="dishGrid">
+                
+                <!-- Dish card 1 -->
+                <article class="dish-card" data-cuisine="chinese" data-type="noodles" data-name="Curry Noodles">
+                    <img src="/images/curry-noodles.jpg" alt="Curry Noodles" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Curry Noodles</h3>
+                        <p class="dish-cuisine">Singaporean</p>
+                        <p class="dish-price">$3.50</p>
+                        <button class="edit-btn" onclick="openEditModal('Curry Noodles', 'Singaporean', '3.50', 'noodles')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 2 -->
+                <article class="dish-card" data-cuisine="chinese" data-type="rice" data-name="Chicken Rice">
+                    <img src="/images/chicken-rice.jpg" alt="Chicken Rice" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Chicken Rice</h3>
+                        <p class="dish-cuisine">Singaporean</p>
+                        <p class="dish-price">$4.00</p>
+                        <button class="edit-btn" onclick="openEditModal('Chicken Rice', 'Singaporean', '4.00', 'rice')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 3 -->
+                <article class="dish-card" data-cuisine="chinese" data-type="noodles" data-name="Char Siew Noodles">
+                    <img src="/images/char-siu-noodles.png" alt="Char Siew Noodles" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Char Siew Noodles</h3>
+                        <p class="dish-cuisine">Singaporean</p>
+                        <p class="dish-price">$3.80</p>
+                        <button class="edit-btn" onclick="openEditModal('Char Siew Noodles', 'Singaporean', '3.80', 'noodles')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 4 -->
+                <article class="dish-card" data-cuisine="malay" data-type="rice" data-name="Nasi Lemak">
+                    <img src="/images/nasi-lemak.jpg" alt="Nasi Lemak" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Nasi Lemak</h3>
+                        <p class="dish-cuisine">Malay</p>
+                        <p class="dish-price">$4.50</p>
+                        <button class="edit-btn" onclick="openEditModal('Nasi Lemak', 'Malay', '4.50', 'rice')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 5 -->
+                <article class="dish-card" data-cuisine="malay" data-type="noodles" data-name="Mee Rebus">
+                    <img src="/images/mee-rebus.jpg" alt="Mee Rebus" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Mee Rebus</h3>
+                        <p class="dish-cuisine">Malay</p>
+                        <p class="dish-price">$3.80</p>
+                        <button class="edit-btn" onclick="openEditModal('Mee Rebus', 'Malay', '3.80', 'noodles')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 6 -->
+                <article class="dish-card" data-cuisine="malay" data-type="noodles" data-name="Mee Soto">
+                    <img src="/images/mee-soto.jpg" alt="Mee Soto" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Mee Soto</h3>
+                        <p class="dish-cuisine">Malay</p>
+                        <p class="dish-price">$3.50</p>
+                        <button class="edit-btn" onclick="openEditModal('Mee Soto', 'Malay', '3.50', 'noodles')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 7 -->
+                <article class="dish-card" data-cuisine="indian" data-type="rice" data-name="Chicken Briyani">
+                    <img src="/images/chicken-briyani.jpg" alt="Chicken Briyani" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Chicken Briyani</h3>
+                        <p class="dish-cuisine">Indian</p>
+                        <p class="dish-price">$5.00</p>
+                        <button class="edit-btn" onclick="openEditModal('Chicken Briyani', 'Indian', '5.00', 'rice')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 8 -->
+                <article class="dish-card" data-cuisine="indian" data-type="other" data-name="Roti Prata">
+                    <img src="/images/roti-prata.jpg" alt="Roti Prata" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Roti Prata</h3>
+                        <p class="dish-cuisine">Indian</p>
+                        <p class="dish-price">$1.50</p>
+                        <button class="edit-btn" onclick="openEditModal('Roti Prata', 'Indian', '1.50', 'other')">EDIT</button>
+                    </div>
+                </article>
+
+                <!-- Dish card 9 -->
+                <article class="dish-card" data-cuisine="indian" data-type="other" data-name="Naan">
+                    <img src="/images/naan.jpg" alt="Naan" class="dish-image">
+                    <div class="dish-info">
+                        <h3 class="dish-name">Naan</h3>
+                        <p class="dish-cuisine">Indian</p>
+                        <p class="dish-price">$2.00</p>
+                        <button class="edit-btn" onclick="openEditModal('Naan', 'Indian', '2.00', 'other')">EDIT</button>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL POPUP: Create/Edit dish -->
+    <div class="modal" id="dishModal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create/Edit Dish</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form class="modal-form" id="dishForm">
+                <!-- Dish name input -->
+                <div class="form-group">
+                    <label for="dishName">Dish Name</label>
+                    <input 
+                        type="text" 
+                        id="dishName" 
+                        placeholder="Set Dish name" 
+                        required
+                    >
+                </div>
+
+                <!-- Price input -->
+                <div class="form-group">
+                    <label for="dishPrice">Price ($)</label>
+                    <input 
+                        type="number" 
+                        id="dishPrice" 
+                        placeholder="Set Price ($)" 
+                        step="0.10" 
+                        min="0"
+                        required
+                    >
+                </div>
+
+                <!-- Cuisine type dropdown -->
+                <div class="form-group">
+                    <label for="dishCuisine">Select Cuisine type ⓘ</label>
+                    <select id="dishCuisine" required>
+                        <option value="">Select Cuisine</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="malay">Malay</option>
+                        <option value="indian">Indian</option>
+                        <option value="singaporean">Singaporean</option>
+                    </select>
+                </div>
+
+                <!-- Food type dropdown -->
+                <div class="form-group">
+                    <label for="dishFoodType">Select Food type ⓘ</label>
+                    <select id="dishFoodType" required>
+                        <option value="">Select Food Type</option>
+                        <option value="rice">Rice</option>
+                        <option value="noodles">Noodles</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Image upload -->
+                <div class="form-group">
+                    <label>Upload Image</label>
+                    <div class="image-upload-box">
+                        <input 
+                            type="file" 
+                            id="dishImage" 
+                            accept="image/*" 
+                            style="display: none;"
+                        >
+                        <button 
+                            type="button" 
+                            class="upload-btn" 
+                            onclick="document.getElementById('dishImage').click()"
+                        >
+                            Choose File
+                        </button>
+                        <span id="fileName">No file chosen</span>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="modal-actions">
+                    <button type="submit" class="apply-btn">Apply</button>
+                    <button type="button" class="delete-btn" onclick="deleteDish()">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 National Environment Agency. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/kang-zheng.js"></script>
+</body>
+</html>
