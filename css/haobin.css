@@ -111,12 +111,24 @@ body.auth-page .auth-main {
   padding: 24px 16px;
 }
 
+body.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.auth-page .auth-main {
+  flex: 1;
+}
+
+
 @media (max-width: 480px) {
   body.auth-page .auth-wrap { width: 100%; }
   body.auth-page .auth-main { padding: 18px 12px; }
   body.auth-page .title { font-size: 28px; }
   body.auth-page .branding img { height: 50px; }
 }
+
 
 
 
