@@ -1,3 +1,4 @@
+// Sidebar
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("sidebarOverlay");
@@ -40,15 +41,62 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', closeSidebar);
   });
 
-const scoreRange = document.getElementById("scoreRange");
-const scoreValue = document.getElementById("scoreValue");
 
-function updateScoreUI(val){
-  scoreValue.textContent = val;
-}
+// Inspection Dashboard
+(() => {
+  const scoreRange = document.getElementById("scoreRange");
+  const scoreValue = document.getElementById("scoreValue");
+  const gradeLetter = document.getElementById("gradeLetter");
+  const gradeCard = document.getElementById("gradeCard");
 
-scoreRange.addEventListener("input", () => {
-  updateScoreUI(scoreRange.value);
-});
+  function scoreToGrade(score) {
+    if (score >= 85) return "A";
+    if (score >= 70) return "B";
+    if (score >= 50) return "C";
+    return "D";
+  }
 
-updateScoreUI(scoreRange.value);
+  function updateUI(score) {
+    const grade = scoreToGrade(score);
+
+    scoreValue.textContent = score;
+
+    gradeLetter.textContent = grade;
+
+    gradeCard.classList.remove("is-a", "is-b", "is-c", "is-d");
+    gradeCard.classList.add(`is-${grade.toLowerCase()}`);
+  }
+
+  updateUI(Number(scoreRange.value));
+
+  scoreRange.addEventListener("input", () => {
+    updateUI(Number(scoreRange.value));
+  });
+})();
+
+// Inspection Submission (demo only)
+(() => {
+  const submitBtn = document.getElementById("submitInspectionBtn");
+  const stallSelect = document.getElementById("stallSelect");
+  const scoreRange = document.getElementById("scoreRange");
+  const remarksBox = document.getElementById("remarks");
+
+  if (!submitBtn) return;
+
+  submitBtn.addEventListener("click", () => {
+    if (!stallSelect.value) {
+      alert("Please select a stall before submitting.");
+      return;
+    }
+
+    alert(
+      "Inspection submitted successfully!\n\n" +
+      `Stall: ${stallSelect.value}\n` +
+      `Score: ${scoreRange.value}`
+    );
+
+    stallSelect.selectedIndex = 0;
+    scoreRange.value = 0;
+    if (remarksBox) remarksBox.value = "";
+  });
+})();

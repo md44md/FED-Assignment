@@ -65,7 +65,7 @@
 
         <div class="score-right">
           <div class="field-label">Score</div>
-          <div class="score-badge" id="scoreValue">0</div>
+          <div class="score-value" id="scoreValue">0</div>
         </div>
       </div>
 
@@ -76,14 +76,14 @@
         <div class="remarks-left">
           <textarea id="remarks" class="remarks-box" rows="8" placeholder="Enter remarks..."></textarea>
 
-          <button class="primary-btn" type="button">Submit Inspection</button>
+          <button class="primary-btn" type="button" id="submitInspectionBtn">Submit Inspection</button>
         </div>
 
         <div class="remarks-right">
-          <div class="grade-card">
+          <div class="grade-card" id="gradeCard">
             <div class="grade-subtitle">Auto-Generated</div>
-            <div class="grade-letter">A</div>
-            <div class="grade-caption">Based on the cleanliness score.</div>
+            <div class="grade-letter" id="gradeLetter">A</div>
+            <div class="grade-caption" id="gradeCaption">Based on the cleanliness score.</div>
           </div>
         </div>
       </div>
