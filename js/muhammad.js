@@ -37,8 +37,7 @@ const db = getDatabase(app);
 
 
 //// MAIN PROGRAM
-document.addEventListener("DOMContentLoaded", () => {
-/// Add to cart functionality 
+document.addEventListener("DOMContentLoaded", async () => {
     // Read cart from database
     async function getCart() {
         const userId = getTempUserId();
@@ -55,181 +54,226 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // Add to cart buttons
-    document.querySelectorAll(".add-to-cart").forEach(button => {
-        button.addEventListener("click", async () => {
-            const cart = await getCart();
-            const stall = button.dataset.stall;
-            
-            const item = {
-                id: button.dataset.id,
-                name: button.dataset.name,
-                price: parseFloat(button.dataset.price),
-                quantity: 1,
-                img: button.dataset.img || "/images/placeholder.png"
-            };
+/// Add to cart functionality 
+    const menuContainer = document.querySelector(".menu-container");
+    if (menuContainer){
+        // Add to cart buttons
+        document.querySelectorAll(".add-to-cart").forEach(button => {
+            button.addEventListener("click", async () => {
+                const cart = await getCart();
+                const stall = button.dataset.stall;
+                
+                const item = {
+                    id: button.dataset.id,
+                    name: button.dataset.name,
+                    price: parseFloat(button.dataset.price),
+                    quantity: 1,
+                    img: button.dataset.img
+                };
 
-            if (!cart[stall]) cart[stall] = [];
-            const existing = cart[stall].find(i => i.id === item.id);
-            if (existing) existing.quantity++;
-            else cart[stall].push(item);
+                if (!cart[stall]) cart[stall] = [];
+                const existing = cart[stall].find(i => i.id === item.id);
+                if (existing) existing.quantity++;
+                else cart[stall].push(item);
 
-            await saveCart(cart);       
-            console.log(cart);
-            alert(`${item.name} added to cart!`);
-        });
-    }); 
-    
+                await saveCart(cart);       
+                console.log(cart);
+                alert(`${item.name} added to cart!`);
+            });
+        }); 
+    }
 
 /// Cart page functionality
     const cartContainer = document.querySelector(".cart-container");
-    if (!cartContainer) return;
+    if (cartContainer) {
 
-    // Render cart cards
-    async function renderAllCarts() {
-        const cart = await getCart();
-        cartContainer.innerHTML = "";
+        // Render cart cards
+        async function renderAllCarts() {
+            const cart = await getCart();
+            cartContainer.innerHTML = "";
 
-        if (Object.keys(cart).length === 0) {
-            const emptyMsg = document.createElement("p");
-            emptyMsg.className = "empty-message";
-            emptyMsg.textContent = "Your cart is empty.";
+            if (Object.keys(cart).length === 0) {
+                const emptyMsg = document.createElement("p");
+                emptyMsg.className = "empty-message";
+                emptyMsg.textContent = "Your cart is empty.";
 
-            cartContainer.appendChild(emptyMsg);
-            return;
-        }
+                cartContainer.appendChild(emptyMsg);
+                return;
+            }
 
-        for (const stall in cart) {
-            const stallHeader = document.createElement("div");
-            stallHeader.classList.add("stall-header");
-            stallHeader.textContent = stall;
-            cartContainer.appendChild(stallHeader);
+            for (const stall in cart) {
+                const stallHeader = document.createElement("div");
+                stallHeader.classList.add("stall-header");
+                stallHeader.textContent = stall;
+                cartContainer.appendChild(stallHeader);
 
-            cart[stall].forEach(item => {
-                const card = document.createElement("div");
-                card.className = "cart-item-card";
+                cart[stall].forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "cart-item-card";
 
-                card.innerHTML = `
-                    <img class="cart-item-img" src="${item.img}" alt="${item.name}">
-                    <div class="cart-item-content">
-                        <p class="cart-item-name">${item.name}</p>
+                    card.innerHTML = `
+                        <img class="cart-item-img" src="${item.img}" alt="${item.name}">
+                        <div class="cart-item-content">
+                            <p class="cart-item-name">${item.name}</p>
 
-                        <div class="cart-item-qty-container">
-                            <button class="cart-item-decrease-btn" data-stall="${stall}" data-id="${item.id}">-</button>
-                            <p class="cart-item-qty">${item.quantity}</p>
-                            <button class="cart-item-increase-btn" data-stall="${stall}" data-id="${item.id}">+</button>
+                            <div class="cart-item-qty-container">
+                                <button class="cart-item-decrease-btn" data-stall="${stall}" data-id="${item.id}">-</button>
+                                <p class="cart-item-qty">${item.quantity}</p>
+                                <button class="cart-item-increase-btn" data-stall="${stall}" data-id="${item.id}">+</button>
+                            </div>
+
+                            <p class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</p>
+
+                            <button class="cart-item-delete-btn" data-stall="${stall}" data-id="${item.id}">
+                                <img src="/images/delete.png" alt="Remove item">
+                            </button>
                         </div>
+                    `;
 
-                        <p class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</p>
+                    cartContainer.appendChild(card);
+                });
+            }
 
-                        <button class="cart-item-delete-btn" data-stall="${stall}" data-id="${item.id}">
-                            <img src="/images/delete.png" alt="Remove item">
-                        </button>
-                    </div>
-                `;
-
-                cartContainer.appendChild(card);
-            });
+            updateCheckoutCard();
         }
 
-        updateCheckoutCard();
-    }
+        renderAllCarts();
 
-    renderAllCarts();
+        // Quantity button functionality
+        cartContainer.addEventListener("click", async e => {
+            const btn = e.target.closest("button");
+            if (!btn) return;
 
-    // Quantity button functionality
-    cartContainer.addEventListener("click", async e => {
-        const btn = e.target.closest("button");
-        if (!btn) return;
+            const stall = btn.dataset.stall;
+            const id = btn.dataset.id;
 
-        const stall = btn.dataset.stall;
-        const id = btn.dataset.id;
+            // Read cart from Firebase
+            const cart = await getCart();
+            if (!cart[stall]) return;
 
-        // Read cart from Firebase
-        const cart = await getCart();
+            const item = cart[stall].find(i => i.id === id);
+            if (!item) return;
 
-        if (!cart[stall]) return;
+            // Apply quantity logic
+            if (btn.classList.contains("cart-item-increase-btn")) {
+                item.quantity++;
+            }
 
-        const item = cart[stall].find(i => i.id === id);
-        if (!item) return;
+            if (btn.classList.contains("cart-item-decrease-btn")) {
+                item.quantity--;
 
-        // Apply quantity logic
-        if (btn.classList.contains("cart-item-increase-btn")) {
-            item.quantity++;
-        }
+                if (item.quantity <= 0) {
+                    cart[stall] = cart[stall].filter(i => i.id !== id);
+                    if (cart[stall].length === 0) {
+                        delete cart[stall];
+                    }
+                }
+            }
 
-        if (btn.classList.contains("cart-item-decrease-btn")) {
-            item.quantity--;
-
-            if (item.quantity <= 0) {
+            if (btn.classList.contains("cart-item-delete-btn")) {
                 cart[stall] = cart[stall].filter(i => i.id !== id);
                 if (cart[stall].length === 0) {
                     delete cart[stall];
                 }
             }
-        }
 
-        if (btn.classList.contains("cart-item-delete-btn")) {
-            cart[stall] = cart[stall].filter(i => i.id !== id);
-            if (cart[stall].length === 0) {
-                delete cart[stall];
-            }
-        }
+            // Save updated cart back to Firebase
+            await saveCart(cart);
 
-        // Save updated cart back to Firebase
-        await saveCart(cart);
-
-        // Re-render UI
-        renderAllCarts();
-    });
-
-
-    // checkout functionality
-    const stallSelect = document.querySelector("#stall-select");
-    const totalCost = document.querySelector(".total-cost");
-    const placeOrderBtn = document.querySelector(".place-order-btn");
-
-    // Update options inside checkout card
-    async function updateCheckoutCard() {
-        const cart = await getCart();
-        
-        stallSelect.innerHTML = "";
-
-        const stalls = Object.keys(cart);
-        if (stalls.length === 0) {
-            stallSelect.innerHTML = '<option disabled selected>No stalls in cart</option>';
-            totalCost.textContent = "Total: $0.00";
-            placeOrderBtn.href = "#";
-            return;
-        }
-
-        stalls.forEach(stall => {
-            const option = document.createElement("option");
-            option.value = stall;
-            option.textContent = stall;
-            stallSelect.appendChild(option);
+            // Re-render UI
+            renderAllCarts();
         });
 
-        updateTotal(); 
+        // checkout functionality
+        const stallSelect = document.querySelector("#stall-select");
+        const totalCost = document.querySelector(".total-cost");
+        const placeOrderBtn = document.querySelector(".place-order-btn");
+        const paymentSelect = document.querySelector("#payment-select");
+
+        // Update options inside checkout card
+        async function populateCheckoutStalls() {
+            const cart = await getCart();
+            
+            stallSelect.innerHTML = "";
+
+            const stalls = Object.keys(cart);
+            if (stalls.length === 0) {
+                stallSelect.innerHTML = '<option disabled selected>No stalls in cart</option>';
+                totalCost.textContent = "Total: $0.00";
+                placeOrderBtn.href = "#";
+                return;
+            }
+
+            stalls.forEach(stall => {
+                const option = document.createElement("option");
+                option.value = stall;
+                option.textContent = stall;
+                stallSelect.appendChild(option);
+            });
+
+            updateCheckoutInfo(); 
+        }
+
+        // Update total whenever the user changes the selected stall and update payment method
+        async function updateCheckoutInfo() {
+            const cart = await getCart();
+            const selectedStall = stallSelect.value;
+            if (!cart[selectedStall]) return;
+
+            const total = cart[selectedStall].reduce((sum, item) => sum + item.price * item.quantity, 0);
+            totalCost.textContent = `Total: $${total.toFixed(2)}`;
+
+            placeOrderBtn.href = `checkout-summary.html?stall=${encodeURIComponent(stallSelect.value)}&payment=${encodeURIComponent(paymentSelect.value)}`;
+        }
+
+        // Listen for changes in stall selection
+        stallSelect.addEventListener("change", updateCheckoutInfo);
+        paymentSelect.addEventListener("change", updateCheckoutInfo);
+
+        populateCheckoutStalls();
     }
 
-    // Update total whenever the user changes the selected stall
-    async function updateTotal() {
-        const cart = await getCart();
-        const selectedStall = stallSelect.value;
-        if (!cart[selectedStall]) return;
+/// Checkout summary functionality
+    const checkoutSummaryContainer = document.querySelector(".checkout-summary-container");
+    if (checkoutSummaryContainer){
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-        const total = cart[selectedStall].reduce((sum, item) => sum + item.price * item.quantity, 0);
-        totalCost.textContent = `Total: $${total.toFixed(2)}`;
+        // Checkout rendering
+        const selectedStall = getQueryParam("stall");
+        const paymentMethod = getQueryParam("payment");
 
-        // Update link to checkout page
-        placeOrderBtn.href = `checkout.html?stall=${encodeURIComponent(selectedStall)}`;
+        if (selectedStall) {
+            // Only run checkout summary if a stall is selected (on checkout page)
+            const cart = await getCart();
+            const items = cart[selectedStall] || [];
+            const tbody = document.querySelector("#checkout-items-body");
+
+            let total = 0;
+
+            items.forEach(item => {
+                const cost = item.price * item.quantity;
+                total += cost;
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${cost.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update total
+            document.querySelector("#total-cost").textContent = `$${total.toFixed(2)}`;
+
+            // Optional: display Order info
+            document.querySelector("#order-id").textContent = "ORD-" + Math.floor(Math.random() * 1000000);
+            document.querySelector("#order-date").textContent = new Date().toLocaleString();
+            document.querySelector("#payment-method").textContent = paymentMethod;
+            document.querySelector("#stall-name").textContent = selectedStall;
+        }
     }
-
-    // Listen for changes in stall selection
-    stallSelect.addEventListener("change", updateTotal);
-
-    // Call this whenever cart changes or on page load
-    updateCheckoutCard();
-
 });

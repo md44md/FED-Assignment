@@ -1,4 +1,39 @@
-/* Cart */
+/* -- Checkout Summary -- */
+.checkout-summary-container{
+    margin: 50px;
+    font-size: 20px;
+    color:#585858;
+}
+
+.checkout-summary-info p{
+    margin: 10px 0;
+}
+
+.checkout-summary-items {
+    width: 100%;
+    border-collapse: collapse;  
+    table-layout: fixed;     
+    margin-top: 50px;    
+}
+
+.checkout-summary-items th,
+.checkout-summary-items td {
+    text-align: center; 
+    vertical-align: middle; 
+    padding: 10px;
+}
+
+.checkout-summary-items td {
+    border-top: 2px solid #BFBFBF;
+}
+
+.checkout-summary-items tfoot td {
+    font-weight: bold;
+    text-align: right;
+}
+
+/* -- Cart -- */
+/* Cart section */
 .cart-checkout-container{
     margin-top: 100px;
     display: flex;
@@ -100,6 +135,7 @@
     aspect-ratio: 1/1;
 }
 
+/* Checkout section */
 .checkout-container{
     display: flex;
     flex-direction: column;
@@ -157,7 +193,7 @@
 }
 
 
-/* Menu */
+/* -- Menu -- */
 .view-cart-btn {
     position: absolute;
     top: 200px;
@@ -282,7 +318,7 @@
     aspect-ratio: 1/1;
 }
 
-/* Stall Details */
+/* -- Stall Details -- */
 .stall-details-container {
     display: flex;
     justify-content: center; 
@@ -355,7 +391,7 @@
     font-size: 26px;
 }
 
-/* stall listing */
+/* -- stall listing -- */
 .stall-container {
     margin-top: 20px;
     display: flex;
