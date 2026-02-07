@@ -39,18 +39,22 @@ const db = getDatabase(app);
 //// MAIN PROGRAM
 document.addEventListener("DOMContentLoaded", async () => {
     // Read cart from database
+    const userId = getTempUserId();
+
     async function getCart() {
-        const userId = getTempUserId();
         const cartRef = ref(db, `carts/${userId}`);
         const snapshot = await get(cartRef);
-
         return snapshot.exists() ? snapshot.val() : {};
     }
 
     // Save cart to database
     async function saveCart(cart) {
-        const userId = getTempUserId();
         await set(ref(db, `carts/${userId}`), cart);
+    }
+
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
     }
 
 
@@ -78,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 await saveCart(cart);       
                 console.log(cart);
-                alert(`${item.name} added to cart!`);
+                alert(`${item.name} added to cart`);
             });
         }); 
     }
@@ -236,10 +240,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 /// Checkout summary page
     const checkoutSummaryContainer = document.querySelector(".checkout-summary-container");
     if (checkoutSummaryContainer){
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
 
         // Checkout rendering
         const selectedStall = getQueryParam("stall");
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Save to firebase when click checkout button
             checkoutBtn.addEventListener("click", async () => {
                 if (!cart[selectedStall]) {
-                    alert("No items to checkout!");
+                    alert("No items to checkout");
                     return;
                 }
 
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const orderRef = ref(db, `orders/${userId}/${orderId}`);
                 await set(orderRef, orderData);
 
-                alert("Order confirmed!");
+                alert("Order confirmed");
 
                 // Clear cart for that stall
                 delete cart[selectedStall];
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    /// Order history page
+/// Order history page
     const orderHistoryBody = document.querySelector(".order-history-body");
     if (orderHistoryBody) {
         const userId = getTempUserId();
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const detailsBtn = document.createElement("a");
                 detailsBtn.classList.add("details-btn");
                 detailsBtn.textContent = "Details";
-                detailsBtn.href = "#";
+                detailsBtn.href = `order-details.html?orderId=${order.orderId}`;
 
                 tr.innerHTML = `
                     <td>${order.orderId}</td>
@@ -351,5 +351,41 @@ document.addEventListener("DOMContentLoaded", async () => {
                 orderHistoryBody.appendChild(tr);
             }
         }
+    }
+
+/// order details page
+    const orderDetailsContainer = document.querySelector(".order-details-container");
+    if (orderDetailsContainer) {
+        const orderId = getQueryParam("orderId");
+        const userId = getTempUserId();
+        
+        if (!orderId) return alert("No order selected");
+
+        const orderRef = ref(db, `orders/${userId}/${orderId}`);
+        const snapshot = await get(orderRef);
+
+        if (!snapshot.exists()) {
+            alert("Order not found");
+            return;
+        }
+
+        const order = snapshot.val();
+
+        document.querySelector("#order-id").textContent = order.orderId;
+        document.querySelector("#order-date").textContent = new Date(order.date).toLocaleString();
+        document.querySelector("#stall-name").textContent = order.stall;
+        document.querySelector("#payment-method").textContent = order.paymentMethod;
+        document.querySelector("#total-cost").textContent = `$${order.total.toFixed(2)}`;
+
+        const tbody = document.querySelector(".order-details-body");
+        order.items.forEach(item => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>$${item.cost.toFixed(2)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
     }
 });
