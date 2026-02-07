@@ -224,8 +224,9 @@
    QUICK ACTIONS SECTION (BOTTOM)
    ============================================ */
 .quick-actions {
-    display: flex;  /* NEW: single box */
+    display: flex;
     justify-content: center;
+    max-width: 100%; /* Full width of container */
 }
 
 .promotions-box {
@@ -234,6 +235,8 @@
     border: 2px solid #6F8879;
     border-radius: 8px;
     text-align: left;
+    width: 100%; /* Take full width */
+    max-width: 800px; /* But don't get too wide */
 }
 
 
