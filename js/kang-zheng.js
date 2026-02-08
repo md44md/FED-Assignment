@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
    ============================================ */
 function initializeChart() {
     // Get the canvas element where chart will be drawn
-    const ctx = document.getElementById('financesChart');
+    const canvas = document.getElementById('financesChart');
     
     // Safety check: exit if canvas doesn't exist
-    if (!ctx) return;
+    if (!canvas) return;
     
     // MOCK DATA - Sample financial data for demonstration
     const chartData = {
@@ -52,7 +52,7 @@ function initializeChart() {
             maintainAspectRatio: true, // Keep proportions
             plugins: {
                 legend: {
-                    display: false // Hide default legend
+                    display: true // Hide default legend
                 }
             },
             scales: {
@@ -70,6 +70,7 @@ function initializeChart() {
     };
 
     // Create the chart
+    const ctx = canvas.getContext("2d");
     new Chart(ctx, config);
 }
 
@@ -398,6 +399,7 @@ if (addFoodTypeBtn && newFoodTypeInput) {
     
     newFoodTypeInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && this.value.trim()) {
+            e.preventDefault(); // Prevent form submission
             const newType = this.value.trim();
             
             // Create new filter button
@@ -426,7 +428,8 @@ if (addFoodTypeBtn && newFoodTypeInput) {
             });
             
             // Insert before the + button
-            filterGroup.insertBefore(newButton, addFoodTypeBtn);
+            const deleteBtn = document.querySelector(".delete-filter-btn");
+            filterGroup.insertBefore(newButton, deleteBtn);
             
             // Also add to modal form dropdown
             const dishFoodTypeDropdown = document.getElementById('dishFoodType');
@@ -497,6 +500,8 @@ if (addDishBtn) {
         
         // Clear form
         document.getElementById('dishForm').reset();
+        uploadedImageData = null; // Clear uploaded image
+        document.getElementById("fileName").textContent = "No file chosen";
         
         // Show modal
         modal.classList.add('active');
@@ -506,11 +511,27 @@ if (addDishBtn) {
 /* ----------------------------------
    FILE UPLOAD DISPLAY
    ---------------------------------- */
+// Store uploaded image as base64
+let uploadedImageData = null;
+
 const dishImageInput = document.getElementById('dishImage');
 if (dishImageInput) {
     dishImageInput.addEventListener('change', function() {
-        const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
-        document.getElementById('fileName').textContent = fileName;
+        const file = this.files[0];
+        if (file) {
+            const fileName = file.name;
+            document.getElementById('fileName').textContent = fileName;
+            
+            // Convert to base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImageData = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('fileName').textContent = 'No file chosen';
+            uploadedImageData = null;
+        }
     });
 }
 
@@ -791,27 +812,33 @@ if (skipQueueBtn) {
 const recallBtn = document.getElementById('recallBtn');
 if (recallBtn) {
     recallBtn.addEventListener('click', function() {
-        // Check if there's any history (served customers)
-        if (queueState.history.length > 0) {
-            // Get the last served queue number from history
-            const lastServed = queueState.history[queueState.history.length - 1];
+        // Fetch current queue and history from Firebase
+        database.ref('queue').once('value').then((snapshot) => {
+            const queueData = snapshot.val();
+            const history = queueData.history || {};
+            
+            // Check if there's any history
+            const historyKeys = Object.keys(history);
+            if (historyKeys.length === 0) {
+                alert('No served customers to recall!');
+                return;
+            }
+            
+            // Get the last served entry
+            const lastKey = historyKeys[historyKeys.length - 1];
+            const lastServed = history[lastKey];
             const lastServedNum = parseInt(lastServed.number, 10);
             
-            // Go back to that number
-            queueState.currentNumber = lastServedNum;
+            // Remove the last history entry
+            database.ref('queue/history/' + lastKey).remove();
             
-            // Remove from history
-            queueState.history.pop();
-            
-            // Update stats
-            queueState.servedToday--;
-            queueState.waiting++;
-            
-            // Update display
-            updateQueueDisplay();
-        } else {
-            alert('No served customers to recall!');
-        }
+            // Update queue
+            database.ref('queue').update({
+                currentNumber: lastServedNum,
+                servedToday: Math.max(0, queueData.servedToday - 1),
+                waiting: queueData.waiting + 1
+            });
+        });
     });
 }
 
@@ -845,27 +872,39 @@ function openHistoryModal() {
     if (!modal || !historyList) return;
     
     // Clear current list
-    historyList.innerHTML = '';
+    historyList.innerHTML = '<p style="text-align: center; padding: 20px;">Loading history...</p>';
     
-    // Check if there's history
-    if (queueState.history.length === 0) {
-        historyList.innerHTML = '<p class="no-history">No queue history yet. Start serving customers!</p>';
-    } else {
-        // Display history items (most recent first)
-        const reversedHistory = [...queueState.history].reverse();
-        reversedHistory.forEach(item => {
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            historyItem.innerHTML = `
-                <div class="history-item-number">#${item.number}</div>
-                <div class="history-item-orders">${item.orders}</div>
-            `;
-            historyList.appendChild(historyItem);
-        });
-    }
-    
-    // Show modal
-    modal.classList.add('active');
+    // Fetch history from Firebase
+    database.ref('queue/history').once('value').then((snapshot) => {
+        historyList.innerHTML = '';
+        
+        const historyData = snapshot.val();
+        
+        // Check if there's history
+        if (!historyData || Object.keys(historyData).length === 0) {
+            historyList.innerHTML = '<p class="no-history">No queue history yet. Start serving customers!</p>';
+        } else {
+            // Convert object to array and reverse (most recent first)
+            const historyArray = Object.values(historyData).reverse();
+            
+            historyArray.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-item-number">#${item.number}</div>
+                    <div class="history-item-orders">${item.orders}</div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+        
+        // Show modal
+        modal.classList.add('active');
+    }).catch((error) => {
+        console.error('Error loading history:', error);
+        historyList.innerHTML = '<p class="no-history">Error loading history</p>';
+        modal.classList.add('active');
+    });
 }
 
 /* ----------------------------------
@@ -885,7 +924,7 @@ const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 if (clearHistoryBtn) {
     clearHistoryBtn.addEventListener('click', function() {
         if (confirm('Clear all queue history? This cannot be undone.')) {
-            queueState.history = [];
+            database.ref("queue/history").remove();
             openHistoryModal(); // Refresh display
             alert('History cleared!');
         }
@@ -1316,7 +1355,7 @@ function loadOrders() {
     const ordersRef = database.ref('orders');
     
     ordersRef.on('value', (snapshot) => {
-        const ordersTableBody = document.querySelector('#ordersTable tbody');
+        const ordersTableBody = document.querySelector('#orders-tbody');
         if (!ordersTableBody) return;
         
         // Clear existing rows
@@ -1324,7 +1363,7 @@ function loadOrders() {
         
         const data = snapshot.val();
         if (!data) {
-            ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">No orders found</td></tr>';
+            ordersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No orders found</td></tr>';
             return;
         }
         
@@ -1335,21 +1374,56 @@ function loadOrders() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><input type="checkbox" class="order-checkbox"></td>
+                <td>${orderId}</td>
                 <td>${order.customer}</td>
                 <td>${order.phone}</td>
-                <td>${order.datetime}</td>
-                <td>${Array.isArray(order.items) ? order.items.join(', ') : order.items}</td>
+                <td>${order.datetime}
+                </td>
                 <td>$${order.total.toFixed(2)}</td>
-                <td><button class="complete-btn">✓</button></td>
             `;
             
             ordersTableBody.appendChild(row);
         });
+        
+        // Setup checkbox listeners after orders are loaded
+        setupCheckboxListeners();
     });
 }
 
 // Load orders when page loads
-if (document.querySelector('#ordersTable')) {
+
+// Setup checkbox listeners (called after orders load)
+function setupCheckboxListeners() {
+    const selectAllCheckbox = document.getElementById('select-all');
+    const rowCheckboxes = document.querySelectorAll('.order-checkbox');
+    
+    if (!selectAllCheckbox || rowCheckboxes.length === 0) return;
+    
+    // Remove old listeners by cloning (to avoid duplicates)
+    const newSelectAll = selectAllCheckbox.cloneNode(true);
+    selectAllCheckbox.parentNode.replaceChild(newSelectAll, selectAllCheckbox);
+    
+    // Select all checkbox
+    newSelectAll.addEventListener('change', function() {
+        const currentRowCheckboxes = document.querySelectorAll('.order-checkbox');
+        currentRowCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+    
+    // Individual checkboxes
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const currentRowCheckboxes = document.querySelectorAll('.order-checkbox');
+            const allChecked = Array.from(currentRowCheckboxes).every(cb => cb.checked);
+            const someChecked = Array.from(currentRowCheckboxes).some(cb => cb.checked);
+            
+            newSelectAll.checked = allChecked;
+            newSelectAll.indeterminate = someChecked && !allChecked;
+        });
+    });
+}
+if (document.querySelector('#orders-tbody')) {
     loadOrders();
 }
 /* ============================================
