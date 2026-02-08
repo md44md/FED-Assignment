@@ -1,5 +1,5 @@
 /* ============================================
-   STALL OWNER - OVERVIEW PAGE JAVASCRIPT
+   OVERVIEW PAGE JAVASCRIPT
    ============================================ */
 
 /* ============================================
@@ -146,4 +146,434 @@ if (filterDropdown) {
     filterDropdown.addEventListener('change', function() {
         // TODO: Filter orders table based on selected date range
     });
+}
+
+/* ============================================
+   MENU MANAGEMENT PAGE FUNCTIONS
+   ============================================ */
+
+/* ----------------------------------
+   MODAL FUNCTIONS
+   ---------------------------------- */
+
+// Open modal for editing or creating a dish
+function openEditModal(name = '', cuisine = '', price = '', foodType = '') {
+    const modal = document.getElementById('dishModal');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    if (!modal) return; // Safety check
+    
+    // Get the action button (last button in modal-actions)
+    const actionButtons = document.querySelector('.modal-actions');
+    const lastButton = actionButtons.lastElementChild;
+
+    // Set modal title based on if editing or creating
+    if (name) {
+        modalTitle.textContent = 'Edit Dish';
+        lastButton.textContent = 'Delete';
+        lastButton.className = 'delete-btn';
+        lastButton.setAttribute('onclick', 'deleteDish()');
+    } else {
+        modalTitle.textContent = 'Create New Dish';
+        lastButton.textContent = 'Cancel';
+        lastButton.className = 'cancel-btn';
+        lastButton.setAttribute('onclick', 'closeModal()');
+    }
+    
+    // Populate form fields with dish data
+    document.getElementById('dishName').value = name;
+    document.getElementById('dishPrice').value = price;
+    document.getElementById('dishCuisine').value = cuisine.toLowerCase();
+    document.getElementById('dishFoodType').value = foodType;
+    
+    // Show the modal
+    modal.classList.add('active');
+}
+
+// Close the modal
+function closeModal() {
+    const modal = document.getElementById('dishModal');
+    if (!modal) return;
+    
+    modal.classList.remove('active');
+    
+    // Reset form
+    const form = document.getElementById('dishForm');
+    if (form) form.reset();
+    
+    const fileName = document.getElementById('fileName');
+    if (fileName) fileName.textContent = 'No file chosen';
+}
+
+// Delete dish function
+function deleteDish() {
+    if (confirm('Are you sure you want to delete this dish?')) {
+        // TODO: Implement Firebase delete
+        closeModal();
+        alert('Dish deleted successfully!');
+    }
+}
+
+/* ----------------------------------
+   SEARCH FUNCTIONALITY
+   ---------------------------------- */
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const dishCards = document.querySelectorAll('.dish-card');
+        
+        dishCards.forEach(card => {
+            const dishName = card.getAttribute('data-name').toLowerCase();
+            
+            // Show or hide card based on search match
+            if (dishName.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}
+
+/* ----------------------------------
+   CUISINE FILTER DROPDOWN
+   ---------------------------------- */
+const cuisineFilter = document.getElementById('cuisineFilter');
+if (cuisineFilter) {
+    cuisineFilter.addEventListener('change', function() {
+        const selectedCuisine = this.value;
+        const dishCards = document.querySelectorAll('.dish-card');
+        
+        dishCards.forEach(card => {
+            const dishCuisine = card.getAttribute('data-cuisine');
+            
+            // Show all if "all" selected, otherwise filter by cuisine
+            if (selectedCuisine === 'all' || dishCuisine === selectedCuisine) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}
+
+/* ----------------------------------
+   FOOD TYPE FILTER BUTTONS
+   ---------------------------------- */
+const filterButtons = document.querySelectorAll('.filter-btn');
+filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        const selectedType = this.getAttribute('data-type');
+        const dishCards = document.querySelectorAll('.dish-card');
+        
+        dishCards.forEach(card => {
+            const dishType = card.getAttribute('data-type');
+            
+            // Show all if "all" selected, otherwise filter by type
+            if (selectedType === 'all' || dishType === selectedType) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}); 
+
+/* ----------------------------------
+   DELETE CUISINE
+   ---------------------------------- */
+function deleteCuisineOption() {
+    const cuisineFilter = document.getElementById('cuisineFilter');
+    const selectedValue = cuisineFilter.value;
+    
+    // Prevent deleting "All Cuisines"
+    if (selectedValue === 'all') {
+        alert('Cannot delete "All Cuisines" option!');
+        return;
+    }
+    
+    if (confirm(`Delete "${cuisineFilter.options[cuisineFilter.selectedIndex].text}" cuisine?`)) {
+        // Remove from filter dropdown
+        cuisineFilter.remove(cuisineFilter.selectedIndex);
+        
+        // Remove from modal dropdown
+        const modalDropdown = document.getElementById('dishCuisine');
+        const modalOptions = modalDropdown.querySelectorAll('option');
+        modalOptions.forEach(option => {
+            if (option.value === selectedValue) {
+                option.remove();
+            }
+        });
+        
+        alert('Cuisine deleted successfully!');
+    }
+}
+
+function deleteSelectedFoodType() {
+    // Find the active button (the one currently selected)
+    const activeBtn = document.querySelector('.filter-btn.active');
+    const typeValue = activeBtn.getAttribute('data-type');
+    const typeText = activeBtn.textContent;
+    
+    // Prevent deleting "Show All"
+    if (typeValue === 'all') {
+        alert('Cannot delete "Show All" option!');
+        return;
+    }
+    
+    if (confirm(`Delete "${typeText}" food type?`)) {
+        // Remove the button
+        activeBtn.remove();
+        
+        // Remove from modal dropdown
+        const modalDropdown = document.getElementById('dishFoodType');
+        const options = modalDropdown.querySelectorAll('option');
+        options.forEach(option => {
+            if (option.value === typeValue) {
+                option.remove();
+            }
+        });
+        
+        // Select "Show All" as default
+        document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
+        
+        alert('Food type deleted successfully!');
+    }
+}
+
+/* ----------------------------------
+   UPDATE CUISINES QUICK STAT
+   ---------------------------------- */
+function updateCuisinesStat() {
+    // Count unique cuisines from dropdown (not including "All Cuisines")
+    const cuisineDropdown = document.getElementById('cuisineFilter');
+    const cuisinesCount = cuisineDropdown.options.length - 1; // -1 to exclude "All Cuisines"
+    
+    // Update the third stat card
+    const statValues = document.querySelectorAll('.stat-value');
+    if (statValues.length >= 3) {
+        statValues[2].textContent = cuisinesCount;
+    }
+}
+
+/* ----------------------------------
+   ADD CUISINE BUTTON
+   ---------------------------------- */
+const addCuisineBtn = document.getElementById('addCuisineBtn');
+const newCuisineInput = document.getElementById('newCuisineInput');
+
+if (addCuisineBtn && newCuisineInput) {
+    addCuisineBtn.addEventListener('click', function() {
+        // Toggle input visibility
+        if (newCuisineInput.style.display === 'none' || !newCuisineInput.style.display) {
+            newCuisineInput.style.display = 'inline-block';
+            newCuisineInput.focus();
+        } else {
+            newCuisineInput.style.display = 'none';
+        }
+    });
+    
+    // Add cuisine when Enter is pressed
+    newCuisineInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+            const newCuisine = this.value.trim();
+            
+            // Add to filter dropdown
+            const cuisineFilter = document.getElementById('cuisineFilter');
+            const option = document.createElement('option');
+            option.value = newCuisine.toLowerCase();
+            option.textContent = newCuisine;
+            cuisineFilter.appendChild(option);
+            
+            // Also add to modal form dropdown
+            const dishCuisineDropdown = document.getElementById('dishCuisine');
+            const modalOption = document.createElement('option');
+            modalOption.value = newCuisine.toLowerCase();
+            modalOption.textContent = newCuisine;
+            dishCuisineDropdown.appendChild(modalOption);
+            
+            // Reset input
+            this.value = '';
+            this.style.display = 'none';
+            
+            alert(`"${newCuisine}" cuisine added successfully!`);
+            updateCuisinesStat();
+        }
+    });
+}
+
+/* ----------------------------------
+   ADD FOOD TYPE BUTTON
+   ---------------------------------- */
+const addFoodTypeBtn = document.getElementById('addFoodTypeBtn');
+const newFoodTypeInput = document.getElementById('newFoodTypeInput');
+
+if (addFoodTypeBtn && newFoodTypeInput) {
+    addFoodTypeBtn.addEventListener('click', function() {
+        if (newFoodTypeInput.style.display === 'none' || !newFoodTypeInput.style.display) {
+            newFoodTypeInput.style.display = 'inline-block';
+            newFoodTypeInput.focus();
+        } else {
+            newFoodTypeInput.style.display = 'none';
+        }
+    });
+    
+    newFoodTypeInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+            const newType = this.value.trim();
+            
+            // Create new filter button
+            const filterGroup = this.parentElement;
+            const newButton = document.createElement('button');
+            newButton.className = 'filter-btn';
+            newButton.setAttribute('data-type', newType.toLowerCase());
+            newButton.textContent = newType;
+            
+            // Add click event to new button
+            newButton.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const selectedType = this.getAttribute('data-type');
+                const dishCards = document.querySelectorAll('.dish-card');
+                
+                dishCards.forEach(card => {
+                    const dishType = card.getAttribute('data-type');
+                    if (dishType === selectedType) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Insert before the + button
+            filterGroup.insertBefore(newButton, addFoodTypeBtn);
+            
+            // Also add to modal form dropdown
+            const dishFoodTypeDropdown = document.getElementById('dishFoodType');
+            const option = document.createElement('option');
+            option.value = newType.toLowerCase();
+            option.textContent = newType;
+            dishFoodTypeDropdown.appendChild(option);
+            
+            // Reset input
+            this.value = '';
+            this.style.display = 'none';
+            
+            alert(`"${newType}" food type added successfully!`);
+        }
+    });
+}
+
+/* ----------------------------------
+   ADD DISH BUTTON
+   ---------------------------------- */
+const addDishBtn = document.getElementById('addDishBtn');
+if (addDishBtn) {
+    addDishBtn.addEventListener('click', function() {
+        openEditModal(); // Open empty modal for new dish
+    });
+}
+
+/* ----------------------------------
+   FORM SUBMISSION
+   ---------------------------------- */
+const dishForm = document.getElementById('dishForm');
+if (dishForm) {
+    dishForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent page reload
+        
+        // Get form values
+        const name = document.getElementById('dishName').value;
+        const price = document.getElementById('dishPrice').value;
+        const cuisine = document.getElementById('dishCuisine').value;
+        const foodType = document.getElementById('dishFoodType').value;
+        
+        // TODO: Save to Firebase
+        
+        alert('Dish saved successfully!');
+        closeModal();
+    });
+}
+
+/* ----------------------------------
+   FILE UPLOAD DISPLAY
+   ---------------------------------- */
+const dishImageInput = document.getElementById('dishImage');
+if (dishImageInput) {
+    dishImageInput.addEventListener('change', function() {
+        const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+        document.getElementById('fileName').textContent = fileName;
+    });
+}
+
+/* ----------------------------------
+   DELETE CUISINE
+   ---------------------------------- */
+function deleteCuisineOption() {
+    const cuisineFilter = document.getElementById('cuisineFilter');
+    const selectedValue = cuisineFilter.value;
+    
+    // Prevent deleting "All Cuisines"
+    if (selectedValue === 'all') {
+        alert('Cannot delete "All Cuisines" option!');
+        return;
+    }
+    
+    if (confirm(`Delete "${cuisineFilter.options[cuisineFilter.selectedIndex].text}" cuisine?`)) {
+        // Remove from filter dropdown
+        cuisineFilter.remove(cuisineFilter.selectedIndex);
+        
+        // Remove from modal dropdown
+        const modalDropdown = document.getElementById('dishCuisine');
+        const modalOptions = modalDropdown.querySelectorAll('option');
+        modalOptions.forEach(option => {
+            if (option.value === selectedValue) {
+                option.remove();
+            }
+        });
+        
+        alert('Cuisine deleted successfully!');
+        updateCuisinesStat();
+    }
+}
+
+function deleteSelectedFoodType() {
+    // Find the active button (the one currently selected)
+    const activeBtn = document.querySelector('.filter-btn.active');
+    const typeValue = activeBtn.getAttribute('data-type');
+    const typeText = activeBtn.textContent;
+    
+    // Prevent deleting "Show All"
+    if (typeValue === 'all') {
+        alert('Cannot delete "Show All" option!');
+        return;
+    }
+    
+    if (confirm(`Delete "${typeText}" food type?`)) {
+        // Remove the button
+        activeBtn.remove();
+        
+        // Remove from modal dropdown
+        const modalDropdown = document.getElementById('dishFoodType');
+        const options = modalDropdown.querySelectorAll('option');
+        options.forEach(option => {
+            if (option.value === typeValue) {
+                option.remove();
+            }
+        });
+        
+        // Select "Show All" as default
+        document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
+        
+        alert('Food type deleted successfully!');
+    }
 }
