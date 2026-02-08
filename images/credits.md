@@ -17,6 +17,8 @@ Rasa Malaysia. (n.d.). [Image of chicken rice] [Image]. https://rasamalaysia.com
 ### Curry noodles / laksa (Woon Heng)
 Woon Heng. (n.d.). [Image of curry laksa/noodles] [Image]. https://woonheng.com/wp-content/uploads/2020/10/Curry-Laksa-1152x1536.jpg
 
+### Customer
+National Environment Agency. (n.d.). [Photograph of customer at hawker culture fest] [Image]. https://www.nea.gov.sg/images/default-source/hawker-centres-division/hawker-culture-fest/hawker_culture.jpg
 
 ### Feedback history image (GetYourGuide)
 GetYourGuide. (n.d.). [Image related to feedback or travel experience] [Image]. https://cdn.getyourguide.com/image/format=auto,fit=crop,gravity=center,quality=60,width=1920,dpr=1/tour_img/022b595424188c583f3b31918d94470970768ed19bbf13df3f33d8cc65ff52c8.jpg
@@ -39,6 +41,12 @@ Wikipedia contributors. (n.d.). [Photograph of nasi lemak] [Image]. Wikimedia Co
 ### NEA logo
 National Environment Agency. (n.d.). NEA logo [Logo]. https://www.nea.gov.sg/images/default-source/about-us/nea-logo.png
 
+### NEA officer
+National Environment Agency. (n.d.). [Photograph of NEA officer Leslie] [Image]. https://www.nea.gov.sg/images/default-source/careers/leslie.jpg
+
+### Operator (Mediacorp / CNA)
+Mediacorp. (n.d.). [Photograph of an operator] [Image]. https://dam.mediacorp.sg/image/upload/s--GSlUwIOy--/c_crop,h_1152,w_2048,x_0,y_1/c_fill,g_auto,h_676,w_1200/f_auto,q_auto/v1/mediacorp/cna/image/2025/12/29/480214009_603700092441286_5486087789705778833_n.jpg?itok=QznjHBqV
+
 ### Order history / tray return
 Mothership. (n.d.). [Image of tray return system] [Image]. https://static.mothership.sg/1/2023/05/tray-return.png
 
@@ -47,6 +55,9 @@ Roti n Rice. (n.d.). [Image of roti prata] [Image]. https://www.rotinrice.com/wp
 
 ### Stall listing / hawker stalls
 Makansutra. (n.d.). [Image of hawker stalls] [Image]. https://makansutra.com/wp-content/uploads/2018/08/d7102c_1-hawkerstalls-generic-maxwell.jpg
+
+### Stall owners
+Isomer. (n.d.). [Photograph of stall owners] [Image]. https://isomer-user-content.by.gov.sg/99/8f40fab2-96c3-43cd-95cf-2052ad002442/Anak-Bapak-Photo.jpg
 
 
 ## Icons (Google Fonts / Material Symbols)
