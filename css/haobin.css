@@ -129,6 +129,131 @@ body.auth-page .auth-main {
   body.auth-page .branding img { height: 50px; }
 }
 
+.feedback-page {
+  background: #d9cfbf;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback-page header .branding img {
+  height: 46px;
+}
+
+.feedback-page header .nav-bar {
+  background: #5f6f63;
+  position: relative;
+  padding: 6px 24px;
+  min-height: 52px;
+}
+
+.feedback-page header .nav-main {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  display: flex;
+  align-items: center;
+}
+
+.feedback-page header .nav-bar .title {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.feedback-page .feedback-dashlink {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.feedback-page .feedback-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px 18px;
+}
+
+.feedback-page .feedback-wrap {
+  width: 620px;
+  max-width: 100%;
+}
+
+.feedback-page .feedback-h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.feedback-page .feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin-top: 8px;
+}
+
+.feedback-page .feedback-row.full {
+  grid-column: 1 / -1;
+}
+
+.feedback-page .feedback-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.feedback-page .auth-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  margin: 6px 0;
+  border: 1px solid #bcbcbc;
+  border-radius: 12px;
+  background: #d8d8d8;
+  font-size: 14px;
+}
+
+.feedback-page .feedback-textarea {
+  resize: none;
+  min-height: 90px;
+}
+
+.feedback-page .feedback-submit {
+  display: inline-block;
+  margin-top: 10px;
+  border: 1px solid #9f9f9f;
+  border-radius: 999px;
+  padding: 10px 38px;
+  font-size: 15px;
+  font-weight: 700;
+  background: #cfcfcf;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .feedback-page .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+  .feedback-page .feedback-wrap {
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+
 
 
 
