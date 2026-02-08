@@ -105,106 +105,7 @@
             <!-- Dish grid -->
             <!-- NOTE: Using mock/sample data. Will be replaced with Firebase later -->
             <div class="dish-grid" id="dishGrid">
-                
-                <!-- Dish card 1 -->
-                <article class="dish-card" data-cuisine="chinese" data-type="noodles" data-name="Curry Noodles">
-                    <img src="/images/curry-noodles.jpg" alt="Curry Noodles" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Curry Noodles</h3>
-                        <p class="dish-cuisine">Singaporean</p>
-                        <p class="dish-price">$3.50</p>
-                        <button class="edit-btn" onclick="openEditModal('Curry Noodles', 'Singaporean', '3.50', 'noodles')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 2 -->
-                <article class="dish-card" data-cuisine="chinese" data-type="rice" data-name="Chicken Rice">
-                    <img src="/images/chicken-rice.jpg" alt="Chicken Rice" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Chicken Rice</h3>
-                        <p class="dish-cuisine">Singaporean</p>
-                        <p class="dish-price">$4.00</p>
-                        <button class="edit-btn" onclick="openEditModal('Chicken Rice', 'Singaporean', '4.00', 'rice')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 3 -->
-                <article class="dish-card" data-cuisine="chinese" data-type="noodles" data-name="Char Siew Noodles">
-                    <img src="/images/char-siu-noodles.png" alt="Char Siew Noodles" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Char Siew Noodles</h3>
-                        <p class="dish-cuisine">Singaporean</p>
-                        <p class="dish-price">$3.80</p>
-                        <button class="edit-btn" onclick="openEditModal('Char Siew Noodles', 'Singaporean', '3.80', 'noodles')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 4 -->
-                <article class="dish-card" data-cuisine="malay" data-type="rice" data-name="Nasi Lemak">
-                    <img src="/images/nasi-lemak.jpg" alt="Nasi Lemak" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Nasi Lemak</h3>
-                        <p class="dish-cuisine">Malay</p>
-                        <p class="dish-price">$4.50</p>
-                        <button class="edit-btn" onclick="openEditModal('Nasi Lemak', 'Malay', '4.50', 'rice')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 5 -->
-                <article class="dish-card" data-cuisine="malay" data-type="noodles" data-name="Mee Rebus">
-                    <img src="/images/mee-rebus.jpg" alt="Mee Rebus" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Mee Rebus</h3>
-                        <p class="dish-cuisine">Malay</p>
-                        <p class="dish-price">$3.80</p>
-                        <button class="edit-btn" onclick="openEditModal('Mee Rebus', 'Malay', '3.80', 'noodles')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 6 -->
-                <article class="dish-card" data-cuisine="malay" data-type="noodles" data-name="Mee Soto">
-                    <img src="/images/mee-soto.jpg" alt="Mee Soto" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Mee Soto</h3>
-                        <p class="dish-cuisine">Malay</p>
-                        <p class="dish-price">$3.50</p>
-                        <button class="edit-btn" onclick="openEditModal('Mee Soto', 'Malay', '3.50', 'noodles')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 7 -->
-                <article class="dish-card" data-cuisine="indian" data-type="rice" data-name="Chicken Briyani">
-                    <img src="/images/chicken-briyani.jpg" alt="Chicken Briyani" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Chicken Briyani</h3>
-                        <p class="dish-cuisine">Indian</p>
-                        <p class="dish-price">$5.00</p>
-                        <button class="edit-btn" onclick="openEditModal('Chicken Briyani', 'Indian', '5.00', 'rice')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 8 -->
-                <article class="dish-card" data-cuisine="indian" data-type="other" data-name="Roti Prata">
-                    <img src="/images/roti-prata.jpg" alt="Roti Prata" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Roti Prata</h3>
-                        <p class="dish-cuisine">Indian</p>
-                        <p class="dish-price">$1.50</p>
-                        <button class="edit-btn" onclick="openEditModal('Roti Prata', 'Indian', '1.50', 'other')">EDIT</button>
-                    </div>
-                </article>
-
-                <!-- Dish card 9 -->
-                <article class="dish-card" data-cuisine="indian" data-type="other" data-name="Naan">
-                    <img src="/images/naan.jpg" alt="Naan" class="dish-image">
-                    <div class="dish-info">
-                        <h3 class="dish-name">Naan</h3>
-                        <p class="dish-cuisine">Indian</p>
-                        <p class="dish-price">$2.00</p>
-                        <button class="edit-btn" onclick="openEditModal('Naan', 'Indian', '2.00', 'other')">EDIT</button>
-                    </div>
-                </article>
-
+                <!-- Firebase loaded -->
             </div>
         </section>
 
@@ -302,7 +203,9 @@
         <p>© 2026 National Environment Agency. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="/js/kang-zheng.js"></script>
 </body>
 </html>

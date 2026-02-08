@@ -484,28 +484,22 @@ function deleteSelectedFoodType() {
 const addDishBtn = document.getElementById('addDishBtn');
 if (addDishBtn) {
     addDishBtn.addEventListener('click', function() {
-        openEditModal(); // Open empty modal for new dish
-    });
-}
-
-/* ----------------------------------
-   FORM SUBMISSION
-   ---------------------------------- */
-const dishForm = document.getElementById('dishForm');
-if (dishForm) {
-    dishForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent page reload
+        const modal = document.getElementById('dishModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const deleteBtn = document.querySelector('.delete-btn');
         
-        // Get form values
-        const name = document.getElementById('dishName').value;
-        const price = document.getElementById('dishPrice').value;
-        const cuisine = document.getElementById('dishCuisine').value;
-        const foodType = document.getElementById('dishFoodType').value;
+        // Set modal to create mode
+        modalTitle.textContent = 'Add New Dish';
+        deleteBtn.style.display = 'none';
         
-        // TODO: Save to Firebase
+        // Clear dish ID
+        modal.removeAttribute('data-dish-id');
         
-        alert('Dish saved successfully!');
-        closeModal();
+        // Clear form
+        document.getElementById('dishForm').reset();
+        
+        // Show modal
+        modal.classList.add('active');
     });
 }
 
@@ -779,29 +773,7 @@ function updateQueueDisplay() {
    ---------------------------------- */
 const nextCustomerBtn = document.getElementById('nextCustomerBtn');
 if (nextCustomerBtn) {
-    nextCustomerBtn.addEventListener('click', function() {
-        // Save current number to history
-        const currentQueueNum = String(queueState.currentNumber).padStart(3, '0');
-        queueState.history.push({
-            number: currentQueueNum,
-            orders: getRandomOrder()
-        });
-        
-        // Store previous number for recall
-        queueState.previousNumber = queueState.currentNumber;
-        
-        // Increment queue number
-        queueState.currentNumber++;
-        
-        // Update stats
-        queueState.servedToday++;
-        if (queueState.waiting > 0) {
-            queueState.waiting--;
-        }
-        
-        // Update display
-        updateQueueDisplay();
-    });
+    nextCustomerBtn.addEventListener('click', nextCustomerFirebase);
 }
 
 /* ----------------------------------
@@ -809,18 +781,7 @@ if (nextCustomerBtn) {
    ---------------------------------- */
 const skipQueueBtn = document.getElementById('skipQueueBtn');
 if (skipQueueBtn) {
-    skipQueueBtn.addEventListener('click', function() {
-        if (confirm('Skip this queue number? (Customer did not show up)')) {
-            // DON'T store this as previous number
-            // DON'T add to history
-            queueState.currentNumber++;
-            
-            // previousNumber stays unchanged (so recall goes to before the skip)
-            
-            // Update display
-            updateQueueDisplay();
-        }
-    });
+    skipQueueBtn.addEventListener('click', skipQueueFirebase);
 }
 
 /* ----------------------------------
@@ -858,21 +819,10 @@ if (recallBtn) {
    RESET QUEUE BUTTON
    Reset queue to start (001)
    ---------------------------------- */
+// Reset Queue Button
 const resetQueueBtn = document.getElementById('resetQueueBtn');
 if (resetQueueBtn) {
-    resetQueueBtn.addEventListener('click', function() {
-        if (confirm('Reset queue to start? This will clear all progress.')) {
-            // Reset all state
-            queueState.currentNumber = 1;
-            queueState.servedToday = 0;
-            queueState.waiting = 2;
-            queueState.previousNumber = null;
-            // Don't clear history - keep for records
-            
-            // Update display
-            updateQueueDisplay();
-        }
-    });
+    resetQueueBtn.addEventListener('click', resetQueueFirebase);
 }
 
 /* ----------------------------------
@@ -951,3 +901,623 @@ document.addEventListener('DOMContentLoaded', function() {
         updateQueueDisplay();
     }
 });
+
+/* ----------------------------------
+   INITIALIZE FIREBASE
+   ---------------------------------- */
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCHN8zHq7L-UgdOmCPzR0oHZGSYlaMXDkE",
+  authDomain: "fed-assignment-fire.firebaseapp.com",
+  databaseURL: "https://fed-assignment-fire-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "fed-assignment-fire",
+  storageBucket: "fed-assignment-fire.firebasestorage.app",
+  messagingSenderId: "897834543564",
+  appId: "1:897834543564:web:6b69f8e844b24c40691569",
+  measurementId: "G-3Z4JVS3RSZ"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Get a reference to the database
+const database = firebase.database();
+
+/* ============================================
+   FIREBASE - MENU MANAGEMENT FUNCTIONS
+   ============================================ */
+
+// Load dishes from Firebase
+function loadDishes() {
+    console.log('loadDishes called!');
+    console.log('database:', database);
+
+    const dishesRef = database.ref('dishes');
+    console.log('dishesRef:', dishesRef);
+    
+    dishesRef.on('value', (snapshot) => {
+        const dishGrid = document.getElementById('dishGrid');
+        if (!dishGrid) return;
+        
+        // Clear existing dishes
+        dishGrid.innerHTML = '';
+        
+        const data = snapshot.val();
+        console.log('data:', data);
+
+        if (!data) {
+            dishGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">No dishes found. Add your first dish!</p>';
+            return;
+        }
+        
+        console.log('Creating dish cards...');
+
+        // Loop through dishes and create cards
+        Object.keys(data).forEach(dishId => {
+            const dish = data[dishId];
+            
+            const dishCard = document.createElement('article');
+            dishCard.className = 'dish-card';
+            dishCard.setAttribute('data-cuisine', dish.cuisine);
+            dishCard.setAttribute('data-type', dish.type);
+            dishCard.setAttribute('data-name', dish.name);
+            dishCard.setAttribute('data-id', dishId);
+            
+            dishCard.innerHTML = `
+                <img src="${dish.image}" alt="${dish.name}" class="dish-image">
+                <div class="dish-info">
+                    <h3 class="dish-name">${dish.name}</h3>
+                    <p class="dish-cuisine">${dish.cuisine.charAt(0).toUpperCase() + dish.cuisine.slice(1)}</p>
+                    <p class="dish-price">$${dish.price.toFixed(2)}</p>
+                    <button class="edit-btn" onclick="openEditModalFirebase('${dishId}')">EDIT</button>
+                </div>
+            `;
+            
+            dishGrid.appendChild(dishCard);
+        });
+        
+        // Update stats
+        updateDishStats();
+    });
+}
+
+// Open modal for editing (Firebase version)
+function openEditModalFirebase(dishId) {
+    database.ref('dishes/' + dishId).once('value').then((snapshot) => {
+        const dish = snapshot.val();
+        if (!dish) return;
+        
+        const modal = document.getElementById('dishModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const deleteBtn = document.querySelector('.delete-btn');
+        
+        // Set modal to edit mode
+        modalTitle.textContent = 'Edit Dish';
+        deleteBtn.style.display = 'inline-block';
+        
+        // Store dish ID for later
+        modal.setAttribute('data-dish-id', dishId);
+        
+        // Fill form
+        document.getElementById('dishName').value = dish.name;
+        document.getElementById('dishPrice').value = dish.price;
+        document.getElementById('dishCuisine').value = dish.cuisine;
+        document.getElementById('dishFoodType').value = dish.type;
+        
+        // Show modal
+        modal.classList.add('active');
+    });
+}
+
+// Add new dish
+function addDishFirebase(dishData) {
+    const newDishRef = database.ref('dishes').push();
+    return newDishRef.set(dishData);
+}
+
+// Update existing dish
+function updateDishFirebase(dishId, dishData) {
+    return database.ref('dishes/' + dishId).update(dishData);
+}
+
+// Delete dish
+function deleteDishFirebase(dishId) {
+    return database.ref('dishes/' + dishId).remove();
+}
+
+// Update form submission to use Firebase
+const dishForm = document.getElementById('dishForm');
+if (dishForm) {
+    dishForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const modal = document.getElementById('dishModal');
+        const dishId = modal.getAttribute('data-dish-id');
+        
+        const dishData = {
+            name: document.getElementById('dishName').value,
+            price: parseFloat(document.getElementById('dishPrice').value),
+            cuisine: document.getElementById('dishCuisine').value,
+            type: document.getElementById('dishFoodType').value,
+            image: '/images/placeholder.jpg', // Default image
+            available: true
+        };
+        
+        if (dishId) {
+            // Update existing dish
+            updateDishFirebase(dishId, dishData)
+                .then(() => {
+                    alert('Dish updated successfully!');
+                    closeModal();
+                })
+                .catch((error) => {
+                    alert('Error updating dish: ' + error.message);
+                });
+        } else {
+            // Add new dish
+            addDishFirebase(dishData)
+                .then(() => {
+                    alert('Dish added successfully!');
+                    closeModal();
+                })
+                .catch((error) => {
+                    alert('Error adding dish: ' + error.message);
+                });
+        }
+    });
+}
+
+// Update delete button to use Firebase
+function deleteDish() {
+    const modal = document.getElementById('dishModal');
+    const dishId = modal.getAttribute('data-dish-id');
+    
+    if (!dishId) {
+        closeModal();
+        return;
+    }
+    
+    if (confirm('Are you sure you want to delete this dish?')) {
+        deleteDishFirebase(dishId)
+            .then(() => {
+                alert('Dish deleted successfully!');
+                closeModal();
+            })
+            .catch((error) => {
+                alert('Error deleting dish: ' + error.message);
+            });
+    }
+}
+
+// Update stats from Firebase data
+function updateDishStats() {
+    database.ref('dishes').once('value').then((snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+        
+        const dishes = Object.values(data);
+        const totalDishes = dishes.length;
+        const activeDishes = dishes.filter(d => d.available).length;
+        
+        // Get unique cuisines
+        const cuisines = new Set();
+        dishes.forEach(d => cuisines.add(d.cuisine));
+        const cuisinesCount = cuisines.size;
+        
+        // Update stat cards
+        const statValues = document.querySelectorAll('.stat-value');
+        if (statValues.length >= 3) {
+            statValues[0].textContent = totalDishes;
+            statValues[1].textContent = activeDishes;
+            statValues[2].textContent = cuisinesCount;
+        }
+    });
+}
+
+// Load dishes when page loads
+if (document.getElementById('dishGrid')) {
+    loadDishes();
+}
+
+/* ============================================
+   FIREBASE - PROMOTIONS MANAGEMENT FUNCTIONS
+   ============================================ */
+
+// Load promotions from Firebase
+function loadPromotions() {
+    const promosRef = database.ref('promotions');
+    
+    promosRef.on('value', (snapshot) => {
+        const promosGrid = document.getElementById('promotionsGrid');
+        if (!promosGrid) return;
+        
+        // Clear existing promotions
+        promosGrid.innerHTML = '';
+        
+        const data = snapshot.val();
+        if (!data) {
+            promosGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">No promotions found. Create your first promotion!</p>';
+            return;
+        }
+        
+        // Loop through promotions and create cards
+        Object.keys(data).forEach(promoId => {
+            const promo = data[promoId];
+            
+            // Determine badge color based on status
+            let badgeColor = 'grey';
+            if (promo.status === 'active') badgeColor = 'orange';
+            else if (promo.status === 'scheduled') badgeColor = 'red';
+            
+            const promoCard = document.createElement('article');
+            promoCard.className = 'promotion-card';
+            promoCard.setAttribute('data-status', promo.status);
+            promoCard.setAttribute('data-id', promoId);
+            
+            promoCard.innerHTML = `
+                <div class="promo-badge ${badgeColor}">
+                    <div class="promo-discount">${promo.discount}</div>
+                    <div class="promo-name">${promo.title}</div>
+                </div>
+                
+                <span class="promo-status ${promo.status}">${promo.status.charAt(0).toUpperCase() + promo.status.slice(1)}</span>
+                
+                <div class="promo-details">
+                    <p class="promo-description">${promo.description}</p>
+                    
+                    <div class="promo-info-row">
+                        <span class="promo-icon">📅</span>
+                        <span>Valid: ${promo.startDate} - ${promo.endDate}</span>
+                    </div>
+                    
+                    <div class="promo-info-row">
+                        <span class="promo-icon">🕐</span>
+                        <span>${promo.startTime && promo.endTime ? promo.startTime + ' - ' + promo.endTime : 'All Day'}</span>
+                    </div>
+                    
+                    <div class="promo-info-row">
+                        <span class="promo-icon">✓</span>
+                        <span>Applies to: ${promo.applicableItems}</span>
+                    </div>
+                </div>
+                
+                <div class="promo-actions">
+                    <button class="promo-edit-btn" onclick="openPromotionModalFirebase('${promoId}')">Edit</button>
+                    <button class="promo-delete-btn" onclick="deletePromotionFirebase('${promoId}')">Delete</button>
+                </div>
+            `;
+            
+            promosGrid.appendChild(promoCard);
+        });
+    });
+}
+
+// Add/Update promotion
+function savePromotionFirebase(promoId, promoData) {
+    if (promoId) {
+        return database.ref('promotions/' + promoId).update(promoData);
+    } else {
+        const newPromoRef = database.ref('promotions').push();
+        return newPromoRef.set(promoData);
+    }
+}
+
+// Delete promotion
+function deletePromotionFirebase(promoId) {
+    if (confirm('Are you sure you want to delete this promotion?')) {
+        database.ref('promotions/' + promoId).remove()
+            .then(() => {
+                alert('Promotion deleted successfully!');
+            })
+            .catch((error) => {
+                alert('Error deleting promotion: ' + error.message);
+            });
+    }
+}
+
+// Load promotions when page loads
+if (document.getElementById('promotionsGrid')) {
+    loadPromotions();
+}
+
+/* ============================================
+   FIREBASE - QUEUE MANAGEMENT FUNCTIONS
+   ============================================ */
+
+// Load queue data from Firebase
+function loadQueueData() {
+    const queueRef = database.ref('queue');
+    
+    queueRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+        
+        // Update display
+        const queueNumberEl = document.getElementById('queueNumber');
+        if (queueNumberEl) {
+            queueNumberEl.textContent = String(data.currentNumber).padStart(3, '0');
+        }
+        
+        const servedTodayEl = document.getElementById('servedToday');
+        if (servedTodayEl) {
+            servedTodayEl.textContent = data.servedToday;
+        }
+        
+        const waitingCountEl = document.getElementById('waitingCount');
+        if (waitingCountEl) {
+            waitingCountEl.textContent = data.waiting;
+        }
+        
+        // Calculate average waiting time
+        const avgWaitTimeEl = document.getElementById('avgWaitTime');
+        if (avgWaitTimeEl) {
+            const avgMinutes = 3 + Math.floor(data.waiting / 2);
+            avgWaitTimeEl.textContent = avgMinutes + 'm';
+        }
+    });
+}
+
+// Next customer
+function nextCustomerFirebase() {
+    database.ref('queue').once('value').then((snapshot) => {
+        const queueData = snapshot.val();
+        
+        // Add to history
+        const historyRef = database.ref('queue/history').push();
+        historyRef.set({
+            number: String(queueData.currentNumber).padStart(3, '0'),
+            orders: 'Sample Order' // Replace with actual order data
+        });
+        
+        // Update queue
+        database.ref('queue').update({
+            currentNumber: queueData.currentNumber + 1,
+            servedToday: queueData.servedToday + 1,
+            waiting: Math.max(0, queueData.waiting - 1)
+        });
+    });
+}
+
+// Skip queue
+function skipQueueFirebase() {
+    if (confirm('Skip this queue number? (Customer did not show up)')) {
+        database.ref('queue').once('value').then((snapshot) => {
+            const queueData = snapshot.val();
+            
+            database.ref('queue').update({
+                currentNumber: queueData.currentNumber + 1
+            });
+        });
+    }
+}
+
+// Reset queue
+function resetQueueFirebase() {
+    if (confirm('Reset queue to start? This will clear all progress.')) {
+        database.ref('queue').update({
+            currentNumber: 1,
+            servedToday: 0,
+            waiting: 2
+        });
+    }
+}
+
+// Load queue when page loads
+if (document.getElementById('queueNumber')) {
+    loadQueueData();
+}
+
+/* ============================================
+   FIREBASE - ORDERS (OVERVIEW PAGE)
+   ============================================ */
+
+// Load orders from Firebase
+function loadOrders() {
+    const ordersRef = database.ref('orders');
+    
+    ordersRef.on('value', (snapshot) => {
+        const ordersTableBody = document.querySelector('#ordersTable tbody');
+        if (!ordersTableBody) return;
+        
+        // Clear existing rows
+        ordersTableBody.innerHTML = '';
+        
+        const data = snapshot.val();
+        if (!data) {
+            ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">No orders found</td></tr>';
+            return;
+        }
+        
+        // Loop through orders and create rows
+        Object.keys(data).forEach(orderId => {
+            const order = data[orderId];
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="checkbox" class="order-checkbox"></td>
+                <td>${order.customer}</td>
+                <td>${order.phone}</td>
+                <td>${order.datetime}</td>
+                <td>${Array.isArray(order.items) ? order.items.join(', ') : order.items}</td>
+                <td>$${order.total.toFixed(2)}</td>
+                <td><button class="complete-btn">✓</button></td>
+            `;
+            
+            ordersTableBody.appendChild(row);
+        });
+    });
+}
+
+// Load orders when page loads
+if (document.querySelector('#ordersTable')) {
+    loadOrders();
+}
+/* ============================================
+   ADDITIONAL FIREBASE FUNCTIONS
+   ============================================ */
+
+// Open promotion modal for editing (Firebase version)
+function openPromotionModalFirebase(promoId) {
+    database.ref('promotions/' + promoId).once('value').then((snapshot) => {
+        const promo = snapshot.val();
+        if (!promo) return;
+        
+        const modal = document.getElementById('promotionModal');
+        const modalTitle = document.getElementById('promoModalTitle');
+        const createBtn = document.querySelector('.promo-create-btn');
+        
+        if (!modal) return;
+        
+        // Set modal to edit mode
+        modalTitle.textContent = 'Edit Promotion';
+        createBtn.textContent = 'Save Changes';
+        
+        // Store promo ID for later
+        modal.setAttribute('data-promo-id', promoId);
+        
+        // Fill form
+        document.getElementById('promoTitle').value = promo.title || '';
+        document.getElementById('promoDescription').value = promo.description || '';
+        
+        // Handle discount type and amount
+        if (promo.discountType === 'bogo') {
+            // Extract buy and get quantities from discount text
+            const match = promo.discount.match(/Buy (\d+) Get (\d+)/);
+            if (match) {
+                document.getElementById('promoBuyQty').value = match[1];
+                document.getElementById('promoGetQty').value = match[2];
+            }
+        } else {
+            document.getElementById('promoTypeAmount').value = promo.discountValue || '';
+        }
+        
+        document.getElementById('promoStartDate').value = promo.startDate || '';
+        document.getElementById('promoEndDate').value = promo.endDate || '';
+        document.getElementById('promoStartTime').value = promo.startTime || '';
+        document.getElementById('promoEndTime').value = promo.endTime || '';
+        document.getElementById('promoApplicableItems').value = promo.applicableItems || '';
+        document.getElementById('promoMinSpend').value = promo.minSpend || '';
+        
+        // Set active discount type button
+        const discountTypeBtns = document.querySelectorAll('.discount-type-btn');
+        discountTypeBtns.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-type') === promo.discountType) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Show/hide appropriate fields based on discount type
+        toggleTypeAmountField(promo.discountType);
+        
+        // Show modal
+        modal.classList.add('active');
+    }).catch((error) => {
+        console.error('Error loading promotion:', error);
+        alert('Error loading promotion: ' + error.message);
+    });
+}
+
+// Update promotion form submission to work with Firebase
+// This replaces the existing form handler
+const existingPromoForm = document.getElementById('promotionForm');
+if (existingPromoForm) {
+    // Remove old event listeners by cloning the element
+    const newPromoForm = existingPromoForm.cloneNode(true);
+    existingPromoForm.parentNode.replaceChild(newPromoForm, existingPromoForm);
+    
+    newPromoForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const modal = document.getElementById('promotionModal');
+        const promoId = modal.getAttribute('data-promo-id');
+        
+        // Get form values
+        const title = document.getElementById('promoTitle').value;
+        const description = document.getElementById('promoDescription').value;
+        const discountType = document.querySelector('.discount-type-btn.active').getAttribute('data-type');
+        const startDate = document.getElementById('promoStartDate').value;
+        const endDate = document.getElementById('promoEndDate').value;
+        const startTime = document.getElementById('promoStartTime').value;
+        const endTime = document.getElementById('promoEndTime').value;
+        const applicableItems = document.getElementById('promoApplicableItems').value;
+        const minSpend = document.getElementById('promoMinSpend').value;
+        
+        // Get discount value and format based on type
+        let discountValue = 0;
+        let discount = '';
+        
+        if (discountType === 'bogo') {
+            const buyQty = document.getElementById('promoBuyQty').value;
+            const getQty = document.getElementById('promoGetQty').value;
+            discount = `Buy ${buyQty} Get ${getQty}`;
+            discountValue = 0;
+        } else {
+            discountValue = parseFloat(document.getElementById('promoTypeAmount').value);
+            if (discountType === 'percentage') {
+                discount = `${discountValue}% OFF`;
+            } else {
+                discount = `$${discountValue} OFF`;
+            }
+        }
+        
+        const promoData = {
+            title: title,
+            discount: discount,
+            description: description,
+            discountType: discountType,
+            discountValue: discountValue,
+            startDate: startDate,
+            endDate: endDate,
+            startTime: startTime,
+            endTime: endTime,
+            applicableItems: applicableItems,
+            minSpend: minSpend ? parseFloat(minSpend) : 0,
+            status: 'active' // Default status
+        };
+        
+        savePromotionFirebase(promoId, promoData)
+            .then(() => {
+                alert(promoId ? 'Promotion updated successfully!' : 'Promotion created successfully!');
+                closePromotionModal();
+                modal.removeAttribute('data-promo-id');
+            })
+            .catch((error) => {
+                alert('Error saving promotion: ' + error.message);
+            });
+    });
+}
+
+// Update Create Promotion button to clear form and set create mode
+const existingCreateBtn = document.getElementById('createPromotionBtn');
+if (existingCreateBtn) {
+    // Remove old event listeners
+    const newCreateBtn = existingCreateBtn.cloneNode(true);
+    existingCreateBtn.parentNode.replaceChild(newCreateBtn, existingCreateBtn);
+    
+    newCreateBtn.addEventListener('click', function() {
+        const modal = document.getElementById('promotionModal');
+        const modalTitle = document.getElementById('promoModalTitle');
+        const createBtn = document.querySelector('.promo-create-btn');
+        
+        // Set modal to create mode
+        modalTitle.textContent = 'Create New Promotion';
+        createBtn.textContent = 'Create Promotion';
+        
+        // Clear promo ID
+        modal.removeAttribute('data-promo-id');
+        
+        // Clear form
+        document.getElementById('promotionForm').reset();
+        
+        // Reset discount type to percentage
+        const discountTypeBtns = document.querySelectorAll('.discount-type-btn');
+        discountTypeBtns.forEach(btn => btn.classList.remove('active'));
+        if (discountTypeBtns[0]) discountTypeBtns[0].classList.add('active');
+        
+        toggleTypeAmountField('percentage');
+        
+        // Show modal
+        modal.classList.add('active');
+    });
+}

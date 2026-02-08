@@ -48,159 +48,7 @@
             <!-- Promotions grid -->
             <!-- NOTE: Using mock/sample data. Will be replaced with Firebase later -->
             <div class="promotions-grid" id="promotionsGrid">
-                
-                <!-- Promotion card 1 - Active -->
-                <article class="promotion-card" data-status="active">
-                    <!-- Badge -->
-                    <div class="promo-badge orange">
-                        <div class="promo-discount">20% OFF</div>
-                        <div class="promo-name">New Year Special</div>
-                    </div>
-                    
-                    <!-- Status tag -->
-                    <span class="promo-status active">Active</span>
-                    
-                    <!-- Details -->
-                    <div class="promo-details">
-                        <p class="promo-description">Happy 2026! Receive 20% off on lunch sets ordered between 11am-2pm on weekdays</p>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">📅</span>
-                            <span>Valid: 1 Jan - 31 Jan 2026</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">🕐</span>
-                            <span>11:00 AM - 2:00 PM</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">✓</span>
-                            <span>Applies to: All Lunch Sets</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Action buttons -->
-                    <div class="promo-actions">
-                        <button class="promo-edit-btn" onclick="openPromotionModal('20% OFF', 'New Year Special', 'Happy 2026! Receive 20% off on lunch sets ordered between 11am-2pm on weekdays', 'percentage', '20', '01/01/2026', '31/01/2026', '11:00', '14:00', 'All Lunch Sets', '', 'active')">Edit</button>
-                        <button class="promo-delete-btn" onclick="deletePromotion()">Delete</button>
-                    </div>
-                </article>
-
-                <!-- Promotion card 2 - Active -->
-                <article class="promotion-card" data-status="active">
-                    <!-- Badge -->
-                    <div class="promo-badge green">
-                        <div class="promo-discount">$2 OFF</div>
-                        <div class="promo-name">First Customer Welcome</div>
-                    </div>
-                    
-                    <!-- Status tag -->
-                    <span class="promo-status active">Active</span>
-                    
-                    <!-- Details -->
-                    <div class="promo-details">
-                        <p class="promo-description">First-time customers get $2 off their first order</p>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">📅</span>
-                            <span>Valid: 1 Jan - 31 Mar 2026</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">🕐</span>
-                            <span>Min. Spend $10</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">✓</span>
-                            <span>Applies to: All Items</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Action buttons -->
-                    <div class="promo-actions">
-                        <button class="promo-edit-btn" onclick="openPromotionModal('$2 OFF', 'First Customer Welcome', 'First-time customers get $2 off their first order', 'fixed', '2', '01/01/2026', '31/03/2026', '', '', 'All Items', '10', 'active')">Edit</button>
-                        <button class="promo-delete-btn" onclick="deletePromotion()">Delete</button>
-                    </div>
-                </article>
-
-                <!-- Promotion card 3 - Scheduled -->
-                <article class="promotion-card" data-status="scheduled">
-                    <!-- Badge -->
-                    <div class="promo-badge red">
-                        <div class="promo-discount">Buy 2 Get 1</div>
-                        <div class="promo-name">CNY Special Promotion</div>
-                    </div>
-                    
-                    <!-- Status tag -->
-                    <span class="promo-status scheduled">Scheduled</span>
-                    
-                    <!-- Details -->
-                    <div class="promo-details">
-                        <p class="promo-description">Buy 2 drinks, Get 1 free during Chinese New Year period</p>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">📅</span>
-                            <span>Valid: 29 Jan - 6 Feb 2026</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">🕐</span>
-                            <span>All Day</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">✓</span>
-                            <span>Applies to: All Drinks</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Action buttons -->
-                    <div class="promo-actions">
-                        <button class="promo-edit-btn" onclick="openPromotionModal('Buy 2 Get 1', 'CNY Special Promotion', 'Buy 2 drinks, Get 1 free during Chinese New Year period', 'bogo', '', '29/01/2026', '06/02/2026', '', '', 'All Drinks', '', 'scheduled')">Edit</button>
-                        <button class="promo-delete-btn" onclick="deletePromotion()">Delete</button>
-                    </div>
-                </article>
-
-                <!-- Promotion card 4 - Expired -->
-                <article class="promotion-card" data-status="expired">
-                    <!-- Badge -->
-                    <div class="promo-badge grey">
-                        <div class="promo-discount">15% OFF</div>
-                        <div class="promo-name">Christmas Special</div>
-                    </div>
-                    
-                    <!-- Status tag -->
-                    <span class="promo-status expired">Expired</span>
-                    
-                    <!-- Details -->
-                    <div class="promo-details">
-                        <p class="promo-description">Christmas celebration discount on all menu items</p>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">📅</span>
-                            <span>Valid: 20 Dec - 26 Dec 2025</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">🕐</span>
-                            <span>All Day</span>
-                        </div>
-                        
-                        <div class="promo-info-row">
-                            <span class="promo-icon">✓</span>
-                            <span>Applies to: All Items</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Action buttons -->
-                    <div class="promo-actions">
-                        <button class="promo-edit-btn" onclick="openPromotionModal('15% OFF', 'Christmas Special', 'Christmas celebration discount on all menu items', 'percentage', '15', '20/12/2025', '26/12/2025', '', '', 'All Items', '', 'expired')">Edit</button>
-                        <button class="promo-delete-btn" onclick="deletePromotion()">Delete</button>
-                    </div>
-                </article>
-
+                <!-- Firebase -->
             </div>
         </section>
 
@@ -363,7 +211,9 @@
         <p>© 2026 National Environment Agency. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="/js/kang-zheng.js"></script>
 </body>
 </html>
