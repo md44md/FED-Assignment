@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stall Owner - Queue Management</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/kang-zheng.css">
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <!-- NEA Logo -->
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <!-- Navigation bar -->
+        <nav class="nav-bar">
+            <a href="#" class="back-btn">&larr;</a>
+            <div class="nav-main">
+                <div class="title">Queue Management</div>
+                <div class="subtitle">Manage your customer queue efficiently</div>
+            </div>
+            <div class="dashboard">Stall Owner Dashboard</div>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="queue-main">
+        
+        <!-- Main queue display card -->
+        <section class="queue-display-card">
+            
+            <!-- Now Serving section -->
+            <div class="now-serving-section">
+                <h2 class="now-serving-label">Now Serving</h2>
+                <div class="queue-number" id="queueNumber">001</div>
+            </div>
+            
+            <!-- Stats boxes -->
+            <div class="queue-stats">
+                <div class="queue-stat-box">
+                    <div class="stat-label">SERVED TODAY</div>
+                    <div class="stat-value" id="servedToday">0</div>
+                </div>
+                <div class="queue-stat-box">
+                    <div class="stat-label">WAITING</div>
+                    <div class="stat-value" id="waitingCount">2</div>
+                </div>
+                <div class="queue-stat-box">
+                    <div class="stat-label">AVG WAITING TIME</div>
+                    <div class="stat-value" id="avgWaitTime">3m</div>
+                </div>
+            </div>
+            
+            <!-- Primary action button -->
+            <button class="next-customer-btn" id="nextCustomerBtn">
+                <span class="btn-icon">▶</span>
+                Next Customer
+            </button>
+            
+            <!-- Secondary action buttons -->
+            <div class="queue-actions">
+                <button class="queue-action-btn skip-btn" id="skipQueueBtn">
+                    <span class="btn-icon">⏭</span>
+                    Skip Queue
+                </button>
+                <button class="queue-action-btn recall-btn" id="recallBtn">
+                    <span class="btn-icon">🔄</span>
+                    Recall
+                </button>
+                <button class="queue-action-btn reset-btn" id="resetQueueBtn">
+                    <span class="btn-icon">🔄</span>
+                    Reset Queue
+                </button>
+                <button class="queue-action-btn history-btn" id="historyBtn">
+                    <span class="btn-icon">📋</span>
+                    History
+                </button>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <!-- MODAL POPUP: Queue History -->
+    <div class="modal" id="historyModal">
+        <div class="modal-overlay" onclick="closeHistoryModal()"></div>
+        <div class="modal-content history-modal-content">
+            <div class="modal-header">
+                <h2>Queue History</h2>
+                <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- History list -->
+                <div class="history-list" id="historyList">
+                    <!-- History items will be dynamically added here -->
+                    <p class="no-history">No queue history yet. Start serving customers!</p>
+                </div>
+                
+                <!-- Clear history button -->
+                <button class="clear-history-btn" id="clearHistoryBtn">Clear History</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 National Environment Agency. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/kang-zheng.js"></script>
+</body>
+</html>

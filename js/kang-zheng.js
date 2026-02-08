@@ -703,3 +703,251 @@ if (promotionForm) {
         closePromotionModal();
     });
 }
+
+/* ============================================
+   QUEUE MANAGEMENT PAGE FUNCTIONS
+   ============================================ */
+
+/* ----------------------------------
+   QUEUE STATE MANAGEMENT
+   ---------------------------------- */
+let queueState = {
+    currentNumber: 1,
+    servedToday: 0,
+    waiting: 2,
+    history: [],
+    previousNumber: null
+};
+
+/* ----------------------------------
+   MOCK ORDER DATA
+   Sample orders for demo purposes
+   ---------------------------------- */
+const mockOrders = [
+    "Chicken Rice, Iced Lemon Tea",
+    "Nasi Lemak",
+    "Char Siew Noodles, Spring Roll",
+    "Mee Rebus",
+    "Curry Noodles, Iced Milo",
+    "Roti Prata, Teh Tarik",
+    "Chicken Briyani",
+    "Mee Soto, Bandung",
+    "Naan, Curry Chicken",
+    "Fried Rice, Ice Water"
+];
+
+/* ----------------------------------
+   GET RANDOM ORDER
+   Returns a random order from mock data
+   ---------------------------------- */
+function getRandomOrder() {
+    return mockOrders[Math.floor(Math.random() * mockOrders.length)];
+}
+
+/* ----------------------------------
+   UPDATE DISPLAY
+   ---------------------------------- */
+function updateQueueDisplay() {
+    // Update queue number display
+    const queueNumberEl = document.getElementById('queueNumber');
+    if (queueNumberEl) {
+        queueNumberEl.textContent = String(queueState.currentNumber).padStart(3, '0');
+    }
+    
+    // Update stats
+    const servedTodayEl = document.getElementById('servedToday');
+    if (servedTodayEl) {
+        servedTodayEl.textContent = queueState.servedToday;
+    }
+    
+    const waitingCountEl = document.getElementById('waitingCount');
+    if (waitingCountEl) {
+        waitingCountEl.textContent = queueState.waiting;
+    }
+    
+    // Calculate average waiting time (mock calculation)
+    const avgWaitTimeEl = document.getElementById('avgWaitTime');
+    if (avgWaitTimeEl) {
+        // Simple formula: base 3 minutes + 1 minute per person waiting
+        const avgMinutes = 3 + Math.floor(queueState.waiting / 2);
+        avgWaitTimeEl.textContent = avgMinutes + 'm';
+    }
+}
+
+/* ----------------------------------
+   NEXT CUSTOMER BUTTON
+   ---------------------------------- */
+const nextCustomerBtn = document.getElementById('nextCustomerBtn');
+if (nextCustomerBtn) {
+    nextCustomerBtn.addEventListener('click', function() {
+        // Save current number to history
+        const currentQueueNum = String(queueState.currentNumber).padStart(3, '0');
+        queueState.history.push({
+            number: currentQueueNum,
+            orders: getRandomOrder()
+        });
+        
+        // Store previous number for recall
+        queueState.previousNumber = queueState.currentNumber;
+        
+        // Increment queue number
+        queueState.currentNumber++;
+        
+        // Update stats
+        queueState.servedToday++;
+        if (queueState.waiting > 0) {
+            queueState.waiting--;
+        }
+        
+        // Update display
+        updateQueueDisplay();
+    });
+}
+
+/* ----------------------------------
+   SKIP QUEUE BUTTON
+   ---------------------------------- */
+const skipQueueBtn = document.getElementById('skipQueueBtn');
+if (skipQueueBtn) {
+    skipQueueBtn.addEventListener('click', function() {
+        if (confirm('Skip this queue number? (Customer did not show up)')) {
+            // DON'T store this as previous number
+            // DON'T add to history
+            queueState.currentNumber++;
+            
+            // previousNumber stays unchanged (so recall goes to before the skip)
+            
+            // Update display
+            updateQueueDisplay();
+        }
+    });
+}
+
+/* ----------------------------------
+   RECALL BUTTON
+   Go back to last SERVED number (not skipped)
+   ---------------------------------- */
+const recallBtn = document.getElementById('recallBtn');
+if (recallBtn) {
+    recallBtn.addEventListener('click', function() {
+        // Check if there's any history (served customers)
+        if (queueState.history.length > 0) {
+            // Get the last served queue number from history
+            const lastServed = queueState.history[queueState.history.length - 1];
+            const lastServedNum = parseInt(lastServed.number, 10);
+            
+            // Go back to that number
+            queueState.currentNumber = lastServedNum;
+            
+            // Remove from history
+            queueState.history.pop();
+            
+            // Update stats
+            queueState.servedToday--;
+            queueState.waiting++;
+            
+            // Update display
+            updateQueueDisplay();
+        } else {
+            alert('No served customers to recall!');
+        }
+    });
+}
+
+/* ----------------------------------
+   RESET QUEUE BUTTON
+   Reset queue to start (001)
+   ---------------------------------- */
+const resetQueueBtn = document.getElementById('resetQueueBtn');
+if (resetQueueBtn) {
+    resetQueueBtn.addEventListener('click', function() {
+        if (confirm('Reset queue to start? This will clear all progress.')) {
+            // Reset all state
+            queueState.currentNumber = 1;
+            queueState.servedToday = 0;
+            queueState.waiting = 2;
+            queueState.previousNumber = null;
+            // Don't clear history - keep for records
+            
+            // Update display
+            updateQueueDisplay();
+        }
+    });
+}
+
+/* ----------------------------------
+   HISTORY BUTTON
+   ---------------------------------- */
+const historyBtn = document.getElementById('historyBtn');
+if (historyBtn) {
+    historyBtn.addEventListener('click', function() {
+        openHistoryModal();
+    });
+}
+
+/* ----------------------------------
+   OPEN HISTORY MODAL
+   ---------------------------------- */
+function openHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    const historyList = document.getElementById('historyList');
+    
+    if (!modal || !historyList) return;
+    
+    // Clear current list
+    historyList.innerHTML = '';
+    
+    // Check if there's history
+    if (queueState.history.length === 0) {
+        historyList.innerHTML = '<p class="no-history">No queue history yet. Start serving customers!</p>';
+    } else {
+        // Display history items (most recent first)
+        const reversedHistory = [...queueState.history].reverse();
+        reversedHistory.forEach(item => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+                <div class="history-item-number">#${item.number}</div>
+                <div class="history-item-orders">${item.orders}</div>
+            `;
+            historyList.appendChild(historyItem);
+        });
+    }
+    
+    // Show modal
+    modal.classList.add('active');
+}
+
+/* ----------------------------------
+   CLOSE HISTORY MODAL
+   ---------------------------------- */
+function closeHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+/* ----------------------------------
+   CLEAR HISTORY BUTTON
+   ---------------------------------- */
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+if (clearHistoryBtn) {
+    clearHistoryBtn.addEventListener('click', function() {
+        if (confirm('Clear all queue history? This cannot be undone.')) {
+            queueState.history = [];
+            openHistoryModal(); // Refresh display
+            alert('History cleared!');
+        }
+    });
+}
+
+/* ----------------------------------
+   INITIALIZE ON PAGE LOAD
+   ---------------------------------- */
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize display if on queue page
+    if (document.getElementById('queueNumber')) {
+        updateQueueDisplay();
+    }
+});
