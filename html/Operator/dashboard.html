@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operator Dashboard</title>
+
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/hayder.css" />
+</head>
+
+<body>
+  <header id="siteHeader">
+        <div class="branding">
+            <img src="/images/NEA-logo.png" alt="NEA logo">
+        </div>
+        
+        <div class="nav-bar">
+            <a href="javascript:history.back()" class="back-btn" aria-label="Go back to previous page">&larr;</a>
+
+            <div class="title">Hawker Centre Management System</div>
+
+            <a href="#" class="dashboard">Operator Dashboard</a>
+        </div>
+    </header>
+
+  <main class="op-main">
+    <div class="op-topbar">
+        <div class="page-header" id="pageHeader">
+            <h1 class="page-name">Operator - Dashboard</h1>
+        </div>
+
+      <div class="op-userbox">
+        <div class="op-usertext">
+          <div class="op-username" id="opUserName">Operator</div>
+          <div class="op-centre" id="opCentreName">—</div>
+        </div>
+        <button class="op-logout" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </div>
+
+    <hr class="page-divider" />
+
+    <section class="op-kpi-grid" aria-label="Operator KPIs">
+      <div class="op-kpi-card">
+        <div class="op-kpi-left">
+          <div class="op-kpi-label">Total Stalls</div>
+          <div class="op-kpi-value" id="kpiTotalStalls">—</div>
+        </div>
+      </div>
+
+      <div class="op-kpi-card">
+        <div class="op-kpi-left">
+          <div class="op-kpi-label">Avg. Hygiene Score</div>
+          <div class="op-kpi-value" id="kpiAvgScore">—</div>
+        </div>
+      </div>
+
+      <div class="op-kpi-card">
+        <div class="op-kpi-left">
+          <div class="op-kpi-label">Total Complaints</div>
+          <div class="op-kpi-value" id="kpiTotalComplaints">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="op-charts-grid">
+      <div class="op-card">
+        <div class="op-card-title">Hygiene Grade Distribution</div>
+        <div class="op-card-body op-chart-wrap">
+          <canvas id="gradePie"></canvas>
+        </div>
+      </div>
+
+      <div class="op-card">
+        <div class="op-card-title">Complaints Trend (Last 6 Months)</div>
+        <div class="op-card-body op-chart-wrap">
+          <canvas id="complaintsLine"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="op-card op-under">
+      <div class="op-card-title">Underperforming Stalls</div>
+      <div class="op-card-body">
+        <div class="recent-table-wrap">
+          <table class="recent-table">
+            <thead>
+              <tr>
+                <th>Stall</th>
+                <th class="centre">Latest Grade</th>
+                <th class="centre">Complaints</th>
+              </tr>
+            </thead>
+            <tbody id="underperformTbody">
+              <tr>
+                <td colspan="3" style="padding:14px;color:#666;">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="op-footnote">Read-only dashboard for Hawker Centre Management</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="op-footer">
+    <p>© 2026 National Environment Agency. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script type="module" src="/js/hayder.js"></script>
+</body>
+</html>
