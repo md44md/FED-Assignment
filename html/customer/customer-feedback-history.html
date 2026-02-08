@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback History - Customer</title>
+
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/haobin.css" />
+</head>
+
+<body class="feedback-history-page">
+  <header>
+    <div class="branding">
+      <img src="../../images/NEA-logo.png" alt="NEA logo">
+    </div>
+
+    <div class="nav-bar">
+      <a href="javascript:history.back()" class="back-btn">&larr;</a>
+
+      <div class="nav-main">
+        <div class="title">FEEDBACK HISTORY</div>
+      </div>
+
+      <a class="feedback-dashlink" href="./customer-dashboard.html">Customer<br>Dashboard</a>
+    </div>
+  </header>
+
+  <main class="fbh-main">
+    <div class="fbh-wrap">
+      <table class="fbh-table">
+        <thead>
+          <tr>
+            <th>Rating</th>
+            <th>Date</th>
+            <th>Stall</th>
+            <th>Feedback status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="fbHistoryBody"></tbody>
+      </table>
+
+      <div id="fbHistoryEmpty" class="fbh-empty" style="display:none;">
+        No feedback submitted yet.
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 National Environment Agency. All rights reserved.</p>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEdzwBBUrJWnwDH6zad4d2K_4Gjb67PD0",
+      authDomain: "fed-asg-group5.firebaseapp.com",
+      databaseURL: "https://fed-asg-group5-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "fed-asg-group5",
+      storageBucket: "fed-asg-group5.firebasestorage.app",
+      messagingSenderId: "365104974612",
+      appId: "1:365104974612:web:bdf7f49b56802c3283d001"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script src="../../js/haobin.js"></script>
+  <script>FeedbackHistory.initHistory();</script>
+</body>
+</html>
+
