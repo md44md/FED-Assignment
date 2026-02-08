@@ -1,9 +1,70 @@
-/* ============================================
-   STALL OWNER - OVERVIEW PAGE STYLES
-   ============================================ */
+/* -- Customer Dashboard, Choose User -- */
+.choose-user-container,
+.dashboard-container{
+    padding: 50px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.choose-user-card,
+.dashboard-card {
+    flex-direction: column;
+
+    width: 350px;
+    aspect-ratio: 2/3;
+    text-align: center;
+
+    text-decoration: none;
+}
+
+.choose-user-card p,
+.dashboard-card p{
+    margin-top: 50px;
+    font-size: 36px;
+    color: #585858;
+}
+
+.choose-user-img-wrapper,
+.dashboard-img-wrapper {
+    width: 250px;
+    aspect-ratio: 1 / 1;
+}
+
+.choose-user-img,
+.dashboard-img {
+    width: 95%;
+    height: 95%;
+}
+
+/* -- Shared styles -- */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card{
+    background-color: #B7CBBF;
+    border-radius: 10px;
+    border: 1px solid #585858;
+}
+
+.img-wrapper {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
 
 /* ============================================
-   MAIN LAYOUT
+   STALL OWNER - OVERVIEW PAGE STYLES
    ============================================ */
 
 /* Main container with beige background */
@@ -1110,5 +1171,298 @@ textarea:focus {
 
     .form-row {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   QUEUE MANAGEMENT PAGE STYLES
+   ============================================ */
+
+/* Main container */
+.queue-main {
+    background-color: #F5F1E8;
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* ============================================
+   MAIN QUEUE DISPLAY CARD
+   ============================================ */
+.queue-display-card {
+    background-color: white;
+    padding: 50px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Now Serving section */
+.now-serving-section {
+    margin-bottom: 30px;
+}
+
+.now-serving-label {
+    font-size: 24px;
+    color: #888;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+}
+
+.queue-number {
+    font-size: 80px;
+    font-weight: bold;
+    color: #6F8879;
+    margin: 0;
+    line-height: 1;
+}
+
+/* ============================================
+   QUEUE STATS BOXES
+   ============================================ */
+.queue-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.queue-stat-box {
+    background-color: #E8E8E8;
+    padding: 20px 15px;
+    border-radius: 8px;
+}
+
+.queue-stat-box .stat-label {
+    font-size: 11px;
+    color: #666;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.queue-stat-box .stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+/* Next Customer button */
+.next-customer-btn {
+    width: 100%;
+    background-color: #51CF66;
+    color: white;
+    border: none;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.next-customer-btn:hover {
+    background-color: #40b353;
+}
+
+.next-customer-btn .btn-icon {
+    font-size: 24px;
+}
+
+/* Secondary (bottom) action buttons grid */
+.queue-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.queue-action-btn {
+    padding: 15px 10px;
+    border: 2px solid #ddd;
+    background-color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.queue-action-btn .btn-icon {
+    font-size: 20px;
+}
+
+.queue-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Skip Queue button */
+.skip-btn {
+    border-color: #FFD93D;
+    color: #D4A30A;
+}
+
+.skip-btn:hover {
+    background-color: #FFF9E6;
+}
+
+/* Recall button - Green */
+.recall-btn {
+    border-color: #51CF66;
+    color: #51CF66;
+}
+
+.recall-btn:hover {
+    background-color: #E8F8EC;
+}
+
+/* Reset Queue button - Red */
+.reset-btn {
+    border-color: #FF6B6B;
+    color: #FF6B6B;
+}
+
+.reset-btn:hover {
+    background-color: #FFE8E8;
+}
+
+/* History button - Grey */
+.history-btn {
+    border-color: #999;
+    color: #666;
+}
+
+.history-btn:hover {
+    background-color: #F5F5F5;
+}
+
+/* ============================================
+   HISTORY MODAL
+   ============================================ */
+.history-modal-content {
+    max-width: 500px;
+}
+
+.modal-body {
+    padding: 20px 30px 30px 30px;
+}
+
+.history-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.history-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.history-item-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6F8879;
+    margin-bottom: 5px;
+}
+
+.history-item-orders {
+    font-size: 14px;
+    color: #666;
+}
+
+.no-history {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+.clear-history-btn {
+    width: 100%;
+    background-color: #FF6B6B;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-history-btn:hover {
+    background-color: #e55555;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - QUEUE MANAGEMENT
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .queue-display-card {
+        padding: 40px 30px;
+    }
+
+    .queue-number {
+        font-size: 60px;
+    }
+
+    .queue-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .queue-main {
+        padding: 20px 10px;
+    }
+
+    .queue-display-card {
+        padding: 30px 20px;
+    }
+
+    .now-serving-label {
+        font-size: 20px;
+    }
+
+    .queue-number {
+        font-size: 50px;
+    }
+
+    .next-customer-btn {
+        font-size: 18px;
+        padding: 15px;
+    }
+
+    .queue-actions {
+        gap: 10px;
+    }
+
+    .queue-action-btn {
+        font-size: 12px;
+        padding: 12px 8px;
     }
 }
