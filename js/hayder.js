@@ -514,3 +514,20 @@ function setupPagination(container, totalItems, pageSize, onPageChange) {
 
   init();
 })();
+
+
+// Sign Out Button
+(() => {
+  const btn = document.getElementById("logOutBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    sessionStorage.removeItem("hcmsUser");
+
+    localStorage.removeItem("neaSidebarOpen");
+
+    window.location.href = "../index.html";
+  });
+})();
