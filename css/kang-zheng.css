@@ -769,3 +769,346 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   PROMOTIONS MANAGEMENT PAGE STYLES
+   ============================================ */
+
+/* Main container */
+.promotions-main {
+    background-color: #F5F1E8;
+    min-height: calc(100vh - 200px);
+    padding: 20px;
+}
+
+/* ============================================
+   TOP SECTION: Create Button
+   ============================================ */
+.promotions-top-section {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Create new promotion button */
+.create-promotion-btn {
+    background-color: #FF8C42;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-promotion-btn:hover {
+    background-color: #e67a30;
+}
+
+/* ============================================
+   PROMOTIONS CONTAINER
+   ============================================ */
+.promotions-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Filter buttons */
+.promotions-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.promo-filter-btn {
+    padding: 10px 25px;
+    border: 2px solid #6F8879;
+    background-color: white;
+    color: #6F8879;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.promo-filter-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.promo-filter-btn.active {
+    background-color: #6F8879;
+    color: white;
+}
+
+/* ============================================
+   PROMOTIONS GRID
+   ============================================ */
+.promotions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+/* Individual promotion card */
+.promotion-card {
+    background-color: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promotion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Promotion badge */
+.promo-badge {
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.promo-badge.orange {
+    background-color: #FF8C42;
+}
+
+.promo-badge.green {
+    background-color: #51CF66;
+}
+
+.promo-badge.red {
+    background-color: #FF6B6B;
+}
+
+.promo-badge.grey {
+    background-color: #999;
+}
+
+.promo-discount {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.promo-name {
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+}
+
+/* Status tag */
+.promo-status {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.promo-status.active {
+    background-color: #51CF66;
+    color: white;
+}
+
+.promo-status.scheduled {
+    background-color: #FFD93D;
+    color: #333;
+}
+
+.promo-status.expired {
+    background-color: #999;
+    color: white;
+}
+
+/* Promotion details */
+.promo-details {
+    margin-bottom: 15px;
+}
+
+.promo-description {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.promo-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.promo-icon {
+    font-size: 16px;
+}
+
+/* Action buttons */
+.promo-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.promo-edit-btn,
+.promo-delete-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.promo-edit-btn {
+    background-color: #6F8879;
+    color: white;
+}
+
+.promo-edit-btn:hover {
+    background-color: #5a6f63;
+}
+
+.promo-delete-btn {
+    background-color: #d9d9d9;
+    color: #666;
+}
+
+.promo-delete-btn:hover {
+    background-color: #FF6B6B;
+    color: white;
+}
+
+/* ============================================
+   PROMOTION MODAL
+   ============================================ */
+.promo-modal-content {
+    max-width: 600px;
+}
+
+.modal-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 5px 0 0 0;
+    font-weight: normal;
+}
+
+/* Discount type buttons */
+.discount-type-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.discount-type-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #6F8879;
+    background-color: white;
+    color: #6F8879;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.discount-type-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.discount-type-btn.active {
+    background-color: #6F8879;
+    color: white;
+}
+
+/* Form row */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Textarea styling */
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #6F8879;
+}
+
+/* Promotion modal action buttons */
+.promo-cancel-btn,
+.promo-create-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.promo-cancel-btn {
+    background-color: #999;
+    color: white;
+}
+
+.promo-cancel-btn:hover {
+    background-color: #777;
+}
+
+.promo-create-btn {
+    background-color: #6F8879;
+    color: white;
+}
+
+.promo-create-btn:hover {
+    background-color: #5a6f63;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - PROMOTIONS
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .promotions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .discount-type-buttons {
+        flex-direction: column;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
