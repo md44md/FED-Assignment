@@ -24,14 +24,29 @@
     border-radius: 10px;
 }
 
-/* -- Customer Dashboard -- */
+/* -- Choose User -- */
+.choose-user-bg{
+    background-color: #FFF0DB;
+}
+
+.choose-user-img-wrapper{
+    background-color: #6F8879;
+}
+
+.choose-user-card{
+    border: 3px solid #6F8879;
+}
+
+/* -- Customer Dashboard, Choose User -- */
+.choose-user-container,
 .dashboard-container{
-    margin: 50px 0;
+    padding: 50px 0;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
 }
 
+.choose-user-card,
 .dashboard-card {
     flex-direction: column;
 
@@ -42,17 +57,20 @@
     text-decoration: none;
 }
 
+.choose-user-card p,
 .dashboard-card p{
     margin-top: 50px;
     font-size: 36px;
     color: #585858;
 }
 
+.choose-user-img-wrapper,
 .dashboard-img-wrapper {
     width: 250px;
     aspect-ratio: 1 / 1;
 }
 
+.choose-user-img,
 .dashboard-img {
     width: 95%;
     height: 95%;
