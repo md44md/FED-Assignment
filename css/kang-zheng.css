@@ -281,3 +281,491 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   MENU MANAGEMENT PAGE STYLES
+   ============================================ */
+
+/* Main container for menu management */
+.menu-main {
+    background-color: #F5F1E8;
+    min-height: calc(100vh - 200px);
+    padding: 20px;
+}
+
+/* ============================================
+   TOP SECTION: Add Dish button + Stats
+   ============================================ */
+.menu-top-section {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Add New Dish button */
+.add-dish-btn {
+    background-color: #6F8879;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.add-dish-btn:hover {
+    background-color: #5a6f63;
+}
+
+/* Summary statistics cards */
+.menu-stats {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.stat-card {
+    background-color: #f9f9f9;
+    border: 2px solid #6F8879;
+    border-radius: 8px;
+    padding: 20px 30px;
+    text-align: center;
+    min-width: 140px;
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: bold;
+    color: #6F8879;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ============================================
+   MENU CONTAINER: Search, Filters, Grid
+   ============================================ */
+.menu-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Search bar */
+.menu-search-bar {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #6F8879;
+}
+
+/* Filters section */
+.menu-filters {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Cuisine dropdown */
+.filter-dropdown {
+    padding: 10px 15px;
+    border: 2px solid #6F8879;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-dropdown:hover {
+    background-color: #f0f0f0;
+}
+
+/* Food type filter buttons */
+.filter-btn {
+    padding: 10px 20px;
+    border: 2px solid #6F8879;
+    background-color: white;
+    color: #6F8879;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.filter-btn.active {
+    background-color: #6F8879;
+    color: white;
+}
+
+/* Add filter button */
+.add-filter-btn {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #6F8879;
+    background-color: white;
+    color: #6F8879;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-filter-btn:hover {
+    background-color: #6F8879;
+    color: white;
+}
+
+/* New filter input */
+.new-filter-input {
+    padding: 8px 12px;
+    border: 2px solid #6F8879;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px;
+}
+
+.new-filter-input:focus {
+    outline: none;
+    border-color: #5a6f63;
+}
+
+/* Delete filter button */
+.delete-filter-btn {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #FF6B6B;
+    background-color: white;
+    color: #FF6B6B;
+    border-radius: 5px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.delete-filter-btn:hover {
+    background-color: #FF6B6B;
+    color: white;
+}
+
+
+/* ============================================
+   DISH GRID
+   ============================================ */
+.dish-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* individual dish card */
+.dish-card {
+    background-color: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Dish image */
+.dish-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Dish information */
+.dish-info {
+    padding: 15px;
+}
+
+.dish-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.dish-cuisine {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 8px 0;
+}
+
+.dish-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #6F8879;
+    margin: 0 0 12px 0;
+}
+
+/* Edit button */
+.edit-btn {
+    width: 100%;
+    background-color: #FF6B6B;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #e55555;
+}
+
+/* ============================================
+   MODAL POPUP (Create/Edit Dish)
+   ============================================ */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex; /* Show when active */
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal content box */
+.modal-content {
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 1001;
+}
+
+/* Modal header */
+.modal-header {
+    background-color: #6F8879;
+    color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #ddd;
+}
+
+/* Modal form */
+.modal-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6F8879;
+}
+
+/* Image upload section */
+.image-upload-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.upload-btn {
+    background-color: #6F8879;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #5a6f63;
+}
+
+#fileName {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Modal action buttons */
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.apply-btn,
+.delete-btn,
+.cancel-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.apply-btn {
+    background-color: #6F8879;
+    color: white;
+}
+
+.apply-btn:hover {
+    background-color: #5a6f63;
+}
+
+.delete-btn {
+    background-color: #FF6B6B;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e55555;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MENU MANAGEMENT
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .menu-top-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .menu-stats {
+        justify-content: space-between;
+    }
+
+    .stat-card {
+        min-width: auto;
+        flex: 1;
+    }
+
+    .dish-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .menu-stats {
+        flex-direction: column;
+    }
+
+    .dish-grid {
+        grid-template-columns: 1fr;
+    }
+}
