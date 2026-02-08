@@ -113,14 +113,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 cart[stall].forEach(item => {
                     const card = document.createElement("div");
-                    card.className = "cart-item-card";
+                    card.className = "cart-item-card card flex-center";
 
                     card.innerHTML = `
-                        <img class="cart-item-img" src="${item.img}" alt="${item.name}">
+                        <div class="cart-img-wrapper img-wrapper">
+                            <img class="cart-item-img img-cover" src="${item.img}" alt="${item.name}">
+                        </div>
                         <div class="cart-item-content">
                             <p class="cart-item-name">${item.name}</p>
 
-                            <div class="cart-item-qty-container">
+                            <div class="cart-item-qty-container flex-center">
                                 <button class="cart-item-decrease-btn" data-stall="${stall}" data-id="${item.id}">-</button>
                                 <p class="cart-item-qty">${item.quantity}</p>
                                 <button class="cart-item-increase-btn" data-stall="${stall}" data-id="${item.id}">+</button>
