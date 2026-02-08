@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leave Your Feedback</title>
+
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/haobin.css" />
+</head>
+
+<body class="feedback-page">
+  <header>
+    <div class="branding">
+      <img src="../../images/NEA-logo.png" alt="NEA logo">
+    </div>
+
+    <div class="nav-bar">
+      <a href="javascript:history.back()" class="back-btn">&larr;</a>
+
+      <div class="nav-main">
+        <div class="title">LEAVE YOUR FEEDBACK</div>
+      </div>
+
+      <a class="feedback-dashlink" href="./customer-dashboard.html">Customer Dashboard</a>
+    </div>
+  </header>
+
+  <main class="feedback-main">
+    <div class="feedback-wrap">
+      <h2 class="feedback-h2">Rating</h2>
+
+      <form id="feedbackForm" novalidate>
+        <!-- filled by JS from URL params -->
+        <input id="fbStallId" type="hidden" />
+        <input id="fbStallName" type="hidden" />
+
+        <div class="feedback-row full">
+          <select id="fbRating" class="auth-input feedback-input">
+            <option value="">Select a rating</option>
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Good</option>
+            <option value="3">3 - Okay</option>
+            <option value="2">2 - Poor</option>
+            <option value="1">1 - Bad</option>
+          </select>
+          <div id="fbRatingErr" class="auth-error"></div>
+        </div>
+
+        <div class="feedback-grid">
+          <div class="feedback-row">
+            <label class="feedback-label" for="fbFirstName">First Name</label>
+            <input id="fbFirstName" class="auth-input feedback-input" type="text" placeholder="First Name" />
+          </div>
+
+          <div class="feedback-row">
+            <label class="feedback-label" for="fbLastName">Last Name</label>
+            <input id="fbLastName" class="auth-input feedback-input" type="text" placeholder="Last Name" />
+          </div>
+
+          <div class="feedback-row">
+            <label class="feedback-label" for="fbPhone">Contact Number</label>
+            <input id="fbPhone" class="auth-input feedback-input" type="text" placeholder="Contact Number" />
+          </div>
+
+          <div class="feedback-row">
+            <label class="feedback-label" for="fbEmail">Email</label>
+            <input id="fbEmail" class="auth-input feedback-input" type="text" placeholder="Email" />
+          </div>
+
+          <div class="feedback-row full">
+            <label class="feedback-label" for="fbComment">Your Feedback</label>
+            <textarea id="fbComment" class="auth-input feedback-input feedback-textarea" rows="6" placeholder="Write your feedback..."></textarea>
+            <div id="fbCommentErr" class="auth-error"></div>
+          </div>
+        </div>
+
+        <div id="fbMsg" class="auth-msg"></div>
+
+        <button class="feedback-submit" type="submit">Submit</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 National Environment Agency. All rights reserved.</p>
+  </footer>
+
+  <!-- Firebase compat -->
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEdzwBBUrJWnwDH6zad4d2K_4Gjb67PD0",
+      authDomain: "fed-asg-group5.firebaseapp.com",
+      databaseURL: "https://fed-asg-group5-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "fed-asg-group5",
+      storageBucket: "fed-asg-group5.firebasestorage.app",
+      messagingSenderId: "365104974612",
+      appId: "1:365104974612:web:bdf7f49b56802c3283d001"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  </script>
+  
+  <script src="../../js/haobin.js"></script>
+  <script>Feedback.initGiveFeedback();</script>
+</body>
+</html>
+
+

@@ -20,7 +20,7 @@
                 <ul class="primary-links">
                     <li><a href="#" class="active">Stall Details</a></li>
                     <li><a href="menu-malay.html">Menu</a></li>
-                    <li><a href="#">Give Feedback</a></li>
+                    <li><a id="giveFeedbackLink" href="#">Give Feedback</a></li>
                 </ul>
             </div>
             <a href="customer-dashboard.html" class="dashboard">Customer Dashboard</a>
@@ -28,7 +28,7 @@
     </header>
     <main>
         <section class="stall-details-container flex-center">
-            <div class="stall-details-card card flex-center">
+            <div class="stall-details-card card flex-center" data-stall-id="warisan-rasa" data-stall-name="Warisan Rasa">
                 <div class="stall-details-img-and-info flex-center">
                     <div class="stall-details-img-wrapper img-wrapper flex-center">
                         <img class="stall-details-img" src="/images/warisan-rasa.png" alt="Warisan Rasa Logo">
@@ -49,6 +49,20 @@
     <footer>
         <p>© 2026 National Environment Agency. All rights reserved.</p>
     </footer>
+
+    <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const card = document.querySelector(".stall-details-card");
+    const stallId = params.get("stallId") || card?.dataset.stallId || "";
+    const stallName = params.get("stallName") || card?.dataset.stallName || "";
+
+    const link = document.getElementById("giveFeedbackLink");
+
+    if (link && stallId) {
+      link.href = `customer-feedback.html?stallId=${encodeURIComponent(stallId)}&stallName=${encodeURIComponent(stallName)}`;
+    }
+  </script>
 
 </body>
 </html>
