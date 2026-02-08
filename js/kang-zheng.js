@@ -286,67 +286,7 @@ filterButtons.forEach(button => {
     });
 }); 
 
-/* ----------------------------------
-   DELETE CUISINE
-   ---------------------------------- */
-function deleteCuisineOption() {
-    const cuisineFilter = document.getElementById('cuisineFilter');
-    const selectedValue = cuisineFilter.value;
-    
-    // Prevent deleting "All Cuisines"
-    if (selectedValue === 'all') {
-        alert('Cannot delete "All Cuisines" option!');
-        return;
-    }
-    
-    if (confirm(`Delete "${cuisineFilter.options[cuisineFilter.selectedIndex].text}" cuisine?`)) {
-        // Remove from filter dropdown
-        cuisineFilter.remove(cuisineFilter.selectedIndex);
-        
-        // Remove from modal dropdown
-        const modalDropdown = document.getElementById('dishCuisine');
-        const modalOptions = modalDropdown.querySelectorAll('option');
-        modalOptions.forEach(option => {
-            if (option.value === selectedValue) {
-                option.remove();
-            }
-        });
-        
-        alert('Cuisine deleted successfully!');
-    }
-}
 
-function deleteSelectedFoodType() {
-    // Find the active button (the one currently selected)
-    const activeBtn = document.querySelector('.filter-btn.active');
-    const typeValue = activeBtn.getAttribute('data-type');
-    const typeText = activeBtn.textContent;
-    
-    // Prevent deleting "Show All"
-    if (typeValue === 'all') {
-        alert('Cannot delete "Show All" option!');
-        return;
-    }
-    
-    if (confirm(`Delete "${typeText}" food type?`)) {
-        // Remove the button
-        activeBtn.remove();
-        
-        // Remove from modal dropdown
-        const modalDropdown = document.getElementById('dishFoodType');
-        const options = modalDropdown.querySelectorAll('option');
-        options.forEach(option => {
-            if (option.value === typeValue) {
-                option.remove();
-            }
-        });
-        
-        // Select "Show All" as default
-        document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
-        
-        alert('Food type deleted successfully!');
-    }
-}
 
 /* ----------------------------------
    UPDATE CUISINES QUICK STAT
@@ -407,6 +347,37 @@ if (addCuisineBtn && newCuisineInput) {
             updateCuisinesStat();
         }
     });
+}
+
+/* ----------------------------------
+   DELETE CUISINE
+   ---------------------------------- */
+function deleteCuisineOption() {
+    const cuisineFilter = document.getElementById('cuisineFilter');
+    const selectedValue = cuisineFilter.value;
+    
+    // Prevent deleting "All Cuisines"
+    if (selectedValue === 'all') {
+        alert('Cannot delete "All Cuisines" option!');
+        return;
+    }
+    
+    if (confirm(`Delete "${cuisineFilter.options[cuisineFilter.selectedIndex].text}" cuisine?`)) {
+        // Remove from filter dropdown
+        cuisineFilter.remove(cuisineFilter.selectedIndex);
+        
+        // Remove from modal dropdown
+        const modalDropdown = document.getElementById('dishCuisine');
+        const modalOptions = modalDropdown.querySelectorAll('option');
+        modalOptions.forEach(option => {
+            if (option.value === selectedValue) {
+                option.remove();
+            }
+        });
+        
+        alert('Cuisine deleted successfully!');
+        updateCuisinesStat();
+    }
 }
 
 /* ----------------------------------
@@ -472,7 +443,41 @@ if (addFoodTypeBtn && newFoodTypeInput) {
         }
     });
 }
+/* ----------------------------------
+   DELETE FOOD TYPE BUTTON
+   ---------------------------------- */
 
+function deleteSelectedFoodType() {
+    // Find the active button (the one currently selected)
+    const activeBtn = document.querySelector('.filter-btn.active');
+    const typeValue = activeBtn.getAttribute('data-type');
+    const typeText = activeBtn.textContent;
+    
+    // Prevent deleting "Show All"
+    if (typeValue === 'all') {
+        alert('Cannot delete "Show All" option!');
+        return;
+    }
+    
+    if (confirm(`Delete "${typeText}" food type?`)) {
+        // Remove the button
+        activeBtn.remove();
+        
+        // Remove from modal dropdown
+        const modalDropdown = document.getElementById('dishFoodType');
+        const options = modalDropdown.querySelectorAll('option');
+        options.forEach(option => {
+            if (option.value === typeValue) {
+                option.remove();
+            }
+        });
+        
+        // Select "Show All" as default
+        document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
+        
+        alert('Food type deleted successfully!');
+    }
+}
 /* ----------------------------------
    ADD DISH BUTTON
    ---------------------------------- */
@@ -515,65 +520,186 @@ if (dishImageInput) {
     });
 }
 
+/* ============================================
+   PROMOTIONS MANAGEMENT PAGE FUNCTIONS
+   ============================================ */
+
 /* ----------------------------------
-   DELETE CUISINE
+   MODAL FUNCTIONS
    ---------------------------------- */
-function deleteCuisineOption() {
-    const cuisineFilter = document.getElementById('cuisineFilter');
-    const selectedValue = cuisineFilter.value;
+
+// Open promotion modal for creating or editing
+function openPromotionModal(discount = '', title = '', description = '', discountType = 'percentage', amount = '', startDate = '', endDate = '', startTime = '', endTime = '', applicableItems = '', minSpend = '', status = '') {
+    const modal = document.getElementById('promotionModal');
+    const modalTitle = document.getElementById('promoModalTitle');
+    const createBtn = document.querySelector('.promo-create-btn');
     
-    // Prevent deleting "All Cuisines"
-    if (selectedValue === 'all') {
-        alert('Cannot delete "All Cuisines" option!');
-        return;
+    if (!modal) return;
+    
+    // Set modal title and button text
+    if (title) {
+        modalTitle.textContent = 'Edit Promotion';
+        createBtn.textContent = 'Save Changes';
+    } else {
+        modalTitle.textContent = 'Create New Promotion';
+        createBtn.textContent = 'Create Promotion';
     }
     
-    if (confirm(`Delete "${cuisineFilter.options[cuisineFilter.selectedIndex].text}" cuisine?`)) {
-        // Remove from filter dropdown
-        cuisineFilter.remove(cuisineFilter.selectedIndex);
-        
-        // Remove from modal dropdown
-        const modalDropdown = document.getElementById('dishCuisine');
-        const modalOptions = modalDropdown.querySelectorAll('option');
-        modalOptions.forEach(option => {
-            if (option.value === selectedValue) {
-                option.remove();
-            }
-        });
-        
-        alert('Cuisine deleted successfully!');
-        updateCuisinesStat();
+    // Populate form fields
+    document.getElementById('promoTitle').value = title;
+    document.getElementById('promoDescription').value = description;
+    document.getElementById('promoTypeAmount').value = amount;
+    document.getElementById('promoStartDate').value = startDate;
+    document.getElementById('promoEndDate').value = endDate;
+    document.getElementById('promoStartTime').value = startTime;
+    document.getElementById('promoEndTime').value = endTime;
+    document.getElementById('promoApplicableItems').value = applicableItems;
+    document.getElementById('promoMinSpend').value = minSpend;
+    
+    // Set active discount type button
+    const discountTypeBtns = document.querySelectorAll('.discount-type-btn');
+    discountTypeBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-type') === discountType) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Show/hide Type Amount based on discount type
+    toggleTypeAmountField(discountType);
+    
+    // Show modal
+    modal.classList.add('active');
+}
+
+// Close promotion modal
+function closePromotionModal() {
+    const modal = document.getElementById('promotionModal');
+    if (!modal) return;
+    
+    modal.classList.remove('active');
+    
+    // Reset form
+    const form = document.getElementById('promotionForm');
+    if (form) form.reset();
+    
+    // Reset discount type to percentage
+    const discountTypeBtns = document.querySelectorAll('.discount-type-btn');
+    discountTypeBtns.forEach(btn => btn.classList.remove('active'));
+    if (discountTypeBtns[0]) discountTypeBtns[0].classList.add('active');
+}
+
+// Delete promotion
+function deletePromotion() {
+    if (confirm('Are you sure you want to delete this promotion?')) {
+        // TODO: Implement Firebase delete
+        alert('Promotion deleted successfully!');
     }
 }
 
-function deleteSelectedFoodType() {
-    // Find the active button (the one currently selected)
-    const activeBtn = document.querySelector('.filter-btn.active');
-    const typeValue = activeBtn.getAttribute('data-type');
-    const typeText = activeBtn.textContent;
+// Toggle Type Amount field visibility based on discount type
+function toggleTypeAmountField(type) {
+    const typeAmountGroup = document.getElementById('typeAmountGroup');
+    const typeAmountInput = document.getElementById('promoTypeAmount');
+    const bogoFieldsGroup = document.getElementById('bogoFieldsGroup');
+    const buyQtyInput = document.getElementById('promoBuyQty');
+    const getQtyInput = document.getElementById('promoGetQty');
     
-    // Prevent deleting "Show All"
-    if (typeValue === 'all') {
-        alert('Cannot delete "Show All" option!');
-        return;
+    if (type === 'bogo') {
+        typeAmountGroup.style.display = 'none';
+        bogoFieldsGroup.style.display = 'grid';
+        typeAmountInput.removeAttribute('required');
+        buyQtyInput.setAttribute('required', 'required');
+        getQtyInput.setAttribute('required', 'required');
+    } else {
+        typeAmountGroup.style.display = 'block';
+        bogoFieldsGroup.style.display = 'none';
+        typeAmountInput.setAttribute('required', 'required');
+        buyQtyInput.removeAttribute('required');
+        getQtyInput.removeAttribute('required');
     }
-    
-    if (confirm(`Delete "${typeText}" food type?`)) {
-        // Remove the button
-        activeBtn.remove();
+}
+
+/* ----------------------------------
+   DISCOUNT TYPE BUTTON TOGGLE
+   ---------------------------------- */
+const discountTypeBtns = document.querySelectorAll('.discount-type-btn');
+discountTypeBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active from all
+        discountTypeBtns.forEach(b => b.classList.remove('active'));
         
-        // Remove from modal dropdown
-        const modalDropdown = document.getElementById('dishFoodType');
-        const options = modalDropdown.querySelectorAll('option');
-        options.forEach(option => {
-            if (option.value === typeValue) {
-                option.remove();
+        // Add active to clicked
+        this.classList.add('active');
+        
+        // Toggle type amount field
+        const discountType = this.getAttribute('data-type');
+        toggleTypeAmountField(discountType);
+    });
+});
+
+/* ----------------------------------
+   FILTER BUTTONS
+   ---------------------------------- */
+const promoFilterBtns = document.querySelectorAll('.promo-filter-btn');
+promoFilterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active from all
+        promoFilterBtns.forEach(b => b.classList.remove('active'));
+        
+        // Add active to clicked
+        this.classList.add('active');
+        
+        // Get filter value
+        const filter = this.getAttribute('data-filter');
+        const promoCards = document.querySelectorAll('.promotion-card');
+        
+        // Filter cards
+        promoCards.forEach(card => {
+            const status = card.getAttribute('data-status');
+            
+            if (filter === 'all' || status === filter) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
             }
         });
+    });
+});
+
+/* ----------------------------------
+   CREATE PROMOTION BUTTON
+   ---------------------------------- */
+const createPromotionBtn = document.getElementById('createPromotionBtn');
+if (createPromotionBtn) {
+    createPromotionBtn.addEventListener('click', function() {
+        openPromotionModal();
+    });
+}
+
+/* ----------------------------------
+   FORM SUBMISSION
+   ---------------------------------- */
+const promotionForm = document.getElementById('promotionForm');
+if (promotionForm) {
+    promotionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        // Select "Show All" as default
-        document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
+        // Get form values
+        const title = document.getElementById('promoTitle').value;
+        const description = document.getElementById('promoDescription').value;
+        const discountType = document.querySelector('.discount-type-btn.active').getAttribute('data-type');
+        const amount = document.getElementById('promoTypeAmount').value;
+        const startDate = document.getElementById('promoStartDate').value;
+        const endDate = document.getElementById('promoEndDate').value;
+        const startTime = document.getElementById('promoStartTime').value;
+        const endTime = document.getElementById('promoEndTime').value;
+        const applicableItems = document.getElementById('promoApplicableItems').value;
+        const minSpend = document.getElementById('promoMinSpend').value;
         
-        alert('Food type deleted successfully!');
-    }
+        // TODO: Save to Firebase
+        
+        alert('Promotion saved successfully!');
+        closePromotionModal();
+    });
 }
