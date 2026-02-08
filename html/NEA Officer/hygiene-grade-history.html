@@ -30,36 +30,29 @@
       <div class="filters-grid">
         <div class="filter-block">
           <h2 class="section-title">Filter by Stall</h2>
-          <select class="field-control">
-            <option selected>Choose Stall</option>
-            <option>Tan Ah Beng Chicken Rice</option>
-            <option>Ah Ma Porridge</option>
-            <option>Naziha West Coast</option>
-            <option>Mei Ling Economic Rice</option>
-            <option>Golden Wok Zi Char</option>
-            <option>House Of Kueh</option>
-            <option>Aiman Nasi Padang</option>
+          <select class="field-control" id="stallFilter">
+            <option value="" selected>Choose Stall</option>
           </select>
         </div>
 
         <div class="filter-block">
           <h2 class="section-title">Filter by Grade</h2>
-          <select class="field-control">
-            <option selected>Choose Grade</option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
+          <select class="field-control" id="gradeFilter">
+            <option value="" selected>Choose Grade</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
           </select>
         </div>
 
         <div class="filter-block">
           <h2 class="section-title">Date range</h2>
-          <select class="field-control">
-            <option selected>Pick a Date</option>
-            <option>Today</option>
-            <option>Last 7 days</option>
-            <option>Last 30 days</option>
+          <select class="field-control" id="dateFilter">
+            <option value="all" selected>Pick a Date</option>
+            <option value="1">Today</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
           </select>
         </div>
       </div>
@@ -80,7 +73,7 @@
               <th class="right">Date</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="historyTbody">
             <tr>
               <td>Tan Ah Beng Chicken Rice</td>
               <td class="centre">92</td>
@@ -148,6 +141,6 @@
     </nav>
   </aside>
 
-  <script type="module" src="../../js/hayder.js"></script>
+  <script type="module" src="/js/hayder.js"></script>
 </body>
 </html>

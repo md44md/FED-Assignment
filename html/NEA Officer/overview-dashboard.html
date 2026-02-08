@@ -31,17 +31,17 @@
         <section class="kpi-grid" aria-label="Key performance indicators">
             <div class="kpi-card">
                 <div class="kpi-label">Total Inspections</div>
-                <div class="kpi-value">128</div>
+                <div class="kpi-value" id="kpiTotalInspections">0</div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-label">Stalls Requiring Re-Inspection</div>
-                <div class="kpi-value">11</div>
+                <div class="kpi-value" id="kpiReinspect">0</div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-label">Inspections Due This Week</div>
-                <div class="kpi-value">4</div>
+                <div class="kpi-value" id="kpiDueThisWeek">0</div>
             </div>
         </section>
 
@@ -81,42 +81,7 @@
                             <th class="right">Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Tan Ah Beng Chicken Rice</td>
-                            <td class="centre">A</td>
-                            <td class="right">16/01/2026</td>
-                        </tr>
-                        <tr>
-                            <td>Ah Ma Porridge</td>
-                            <td class="centre">B</td>
-                            <td class="right">16/01/2026</td>
-                        </tr>
-                        <tr>
-                            <td>Naziha West Coast</td>
-                            <td class="centre">B</td>
-                            <td class="right">15/01/2026</td>
-                        </tr>
-                        <tr>
-                            <td>Mei Ling Economic Rice</td>
-                            <td class="centre">C</td>
-                            <td class="right">15/01/2026</td>
-                        </tr>
-                        <tr>
-                            <td>Golden Wok Zi Char</td>
-                            <td class="centre">A</td>
-                            <td class="right">14/01/2026</td>
-                        </tr>
-                        <tr>
-                            <td>House Of Kueh</td>
-                            <td class="centre">B</td>
-                            <td class="right">14/01/2026</td>
-                        </tr>
-                        <tr>
-                            <td>Aiman Nasi Padang</td>
-                            <td class="centre">B</td>
-                            <td class="right">14/01/2026</td>
-                        </tr>
+                    <tbody id="recentInspectionsBody">
                     </tbody>
                 </table>
             </div>
@@ -141,6 +106,6 @@
         </nav>
     </aside>
 
-  <script type="module" src="../../js/hayder.js"></script>
+  <script type="module" src="/js/hayder.js"></script>
 </body>
 </html>
