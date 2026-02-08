@@ -1,3 +1,29 @@
+/* -- Shared styles -- */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card{
+    background-color: #B7CBBF;
+    border-radius: 10px;
+    border: 1px solid #585858;
+}
+
+.img-wrapper {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
 /* -- Customer Dashboard -- */
 .dashboard-container{
     margin: 50px 0;
@@ -7,15 +33,10 @@
 }
 
 .dashboard-card {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
-    border-radius: 10px;
     width: 350px;
     aspect-ratio: 2/3;
-    background-color: #B7CBBF;
     text-align: center;
 
     text-decoration: none;
@@ -30,20 +51,11 @@
 .dashboard-img-wrapper {
     width: 250px;
     aspect-ratio: 1 / 1;
-    background-color: white;
-    border-radius: 10px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
 }
 
 .dashboard-img {
     width: 95%;
     height: 95%;
-    object-fit: cover;
-    border-radius: 10px;
 }
 
 /* -- Order History -- */
@@ -115,10 +127,6 @@
 }
 
 #checkout-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     width: 300px;
     height: 50px;            
     margin: 20px auto 0 auto;
@@ -165,26 +173,17 @@
 }
 
 .cart-item-card {
-    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
 
-    border: 1px solid #585858;
-    border-radius: 10px;
     width: 1000px;
     aspect-ratio: 7/1;
-    background-color: #B7CBBF;
     text-align: center;
 }
 
-.cart-item-img {
+.cart-img-wrapper{
+    margin-left: 20px; 
     width: 15%;
     aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 10px;  
-    background-color: white;
-    margin-left: 20px;
 }
 
 .cart-item-content {
@@ -206,10 +205,7 @@
 }
 
 .cart-item-qty-container {
-    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
     gap: 30px;
 }
 
@@ -250,15 +246,9 @@
     position: sticky;
     top: 100px;
 
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
 
-    border: 1px solid #585858;
-    border-radius: 10px;
     width: 400px;
-    background-color: #B7CBBF;
     box-sizing: border-box;
     padding: 0 20px;
     
@@ -276,12 +266,6 @@
     position: sticky;
     top: 255px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 1px solid #585858;
-    border-radius: 10px;
     width: 400px;
     aspect-ratio: 6/1;
     background-color: #6F8879;
@@ -300,10 +284,7 @@
     top: 200px;
     right: 75px;
 
-    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
 
     margin-top: 20px;
     padding: 24px 60px;
@@ -326,52 +307,28 @@
     position: relative;
 
     margin-top: 100px;
-    display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
     padding: 20px;
 }
 
 .menu-item-card {
-    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
 
-    border: 1px solid #585858;
-    border-radius: 10px;
     width: 500px;
     aspect-ratio: 2.5/1;
-    background-color: #B7CBBF;
     text-align: center;
 }
 
 .menu-item-img-wrapper {
     width: 50%;
     aspect-ratio: 1 / 1;
-    background-color: white;
-    border-radius: 10px;
     margin-left: 30px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
-
-.menu-item-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
 
 .menu-item-content {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
     gap: 15px;
     width: 100%;
 }
@@ -396,10 +353,8 @@
 }
 
 .menu-item-actions{
-    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center; 
+
     gap: 10px;
     padding-bottom: 10px;
 }
@@ -421,31 +376,23 @@
 
 /* -- Stall Details -- */
 .stall-details-container {
-    display: flex;
-    justify-content: center; 
     padding: 20px;
     margin-bottom: 45px;           
 }
 
 .stall-details-card {
-    display: flex;
     flex-direction: column;
-    align-items: center;
 
-    border: 1px solid #585858;
     border-radius: 20px;
     width: 800px;
     aspect-ratio: 12/7;
-    background-color: #B7CBBF;
     text-align: center;
 
     color: #585858;
 }
 
 .stall-details-img-and-info {
-    display: flex;
     flex-direction: row;
-    align-items: center;
     gap: 30px;
     padding: 20px;
     margin-top: 40px;
@@ -454,27 +401,6 @@
 .stall-details-img-wrapper {
     width: 300px;
     aspect-ratio: 5 / 3;
-    background-color: white;
-    border-radius: 10px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.stall-details-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.stall-details-img {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex: 1;
-    min-width: 0;
 }
 
 .stall-details-info p {
@@ -495,23 +421,16 @@
 /* -- stall listing -- */
 .stall-container {
     margin-top: 20px;
-    display: flex;
     flex-wrap: wrap;
     gap: 80px;
-    justify-content: center;
     padding: 20px;
 }
 
 .stall-card-btn {
-    display: flex;
     flex-direction: column;
-    align-items: center;
 
-    border: 1px solid #585858;
-    border-radius: 10px;
     width: 350px;
     aspect-ratio: 1/1;
-    background-color: #B7CBBF;
     text-align: center; 
 
     text-decoration: none;
@@ -521,20 +440,7 @@
 .stall-img-wrapper {
     width: 60%;
     aspect-ratio: 1 / 1;
-    background-color: white;
-    border-radius: 10px;
     margin-top: 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.stall-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
 }
 
 .stall-name {
