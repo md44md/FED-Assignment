@@ -1,3 +1,6 @@
+// =========================
+// NEA OFFICER
+// =========================
 // Firebase Login Logic for NEA Officer and Operator
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import {
@@ -106,7 +109,7 @@ async function findUserByIdentifierAndRole(identifier, role) {
       if (role === "nea") {
         window.location.href = "../NEA Officer/overview-dashboard.html";
       } else if (role === "operator") {
-        window.location.href = "../Operator/operator-dashboard.html";
+        window.location.href = "../Operator/dashboard.html";
       } else {
         window.location.href = "../index.html";
       }
@@ -531,3 +534,340 @@ function setupPagination(container, totalItems, pageSize, onPageChange) {
     window.location.href = "../index.html";
   });
 })();
+
+
+
+// =========================
+// OPERATOR
+// =========================
+(() => {
+  const elTotalStalls = document.getElementById("kpiTotalStalls");
+  const elAvgScore = document.getElementById("kpiAvgScore");
+  const elTotalComplaints = document.getElementById("kpiTotalComplaints");
+  const elUserName = document.getElementById("opUserName");
+  const elCentreName = document.getElementById("opCentreName");
+  const btnLogout = document.getElementById("logoutBtn");
+  const underTbody = document.getElementById("underperformTbody");
+  const pieCanvas = document.getElementById("gradePie");
+  const lineCanvas = document.getElementById("complaintsLine");
+
+  const isOperatorDash = !!(elTotalStalls && pieCanvas && lineCanvas && underTbody);
+  if (!isOperatorDash) return;
+
+  function norm(s){
+    return String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
+  }
+
+  btnLogout?.addEventListener("click", () => {
+    sessionStorage.removeItem("hcmsUser");
+    window.location.href = "../index.html";
+  });
+
+  function getSessionUser() {
+    try { return JSON.parse(sessionStorage.getItem("hcmsUser") || "null"); }
+    catch { return null; }
+  }
+
+  function tsToDate(ts) {
+    if (!ts) return null;
+    if (typeof ts.toDate === "function") return ts.toDate();
+    const d = new Date(ts);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function scoreToGrade(score) {
+    if (score >= 85) return "A";
+    if (score >= 70) return "B";
+    if (score >= 50) return "C";
+    return "D";
+  }
+
+  function gradeRank(g){
+    if (g === "A") return 1;
+    if (g === "B") return 2;
+    if (g === "C") return 3;
+    if (g === "D") return 4;
+    return 0;
+  }
+
+  function monthKey(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  function lastNMonthsLabels(n = 6) {
+    const now = new Date();
+    const labels = [];
+    const keys = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      labels.push(d.toLocaleString("en-GB", { month: "short" }));
+      keys.push(monthKey(d));
+    }
+    return { labels, keys };
+  }
+
+  const CLEMENTI_STALLS = [
+    "Tan Ah Beng Chicken Rice",
+    "Ah Ma Porridge",
+    "Naziha West Coast",
+    "Mei Ling Economic Rice",
+    "Golden Wok Zi Char",
+    "House Of Kueh",
+    "Aiman Nasi Padang",
+  ];
+
+  const STALL_SET = new Set(CLEMENTI_STALLS.map(norm));
+  const DISPLAY_NAME_BY_KEY = new Map(CLEMENTI_STALLS.map(s => [norm(s), s]));
+
+  let pieChart = null;
+  let lineChart = null;
+
+  async function loadOperatorProfile() {
+    const sessionUser = getSessionUser();
+    if (!sessionUser || sessionUser.role !== "operator") {
+      window.location.href = "../index.html";
+      return null;
+    }
+
+    if (elUserName) elUserName.textContent = sessionUser.name || "Operator";
+    if (elCentreName) elCentreName.textContent = "Loading…";
+
+    const qy = query(
+      collection(db, "users"),
+      where("identifier", "==", sessionUser.identifier),
+      where("role", "==", "operator"),
+      limit(1)
+    );
+    const snap = await getDocs(qy);
+
+    const docData = snap.empty ? {} : snap.docs[0].data();
+    const name = docData.name || sessionUser.name || "Operator";
+    const hawkerCentre = docData.hawkerCentre || "Clementi Hawker Centre";
+
+    if (elUserName) elUserName.textContent = name;
+    if (elCentreName) elCentreName.textContent = hawkerCentre;
+
+    return { name, hawkerCentre };
+  }
+
+  async function loadComplaints(hawkerCentre) {
+    const qy = query(collection(db, "complaints"), where("hawkerCentre", "==", hawkerCentre));
+    const snap = await getDocs(qy);
+    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    rows.sort((a, b) => {
+      const da = tsToDate(a.createdAt)?.getTime() ?? 0;
+      const dbb = tsToDate(b.createdAt)?.getTime() ?? 0;
+      return dbb - da;
+    });
+
+    if (elTotalComplaints) elTotalComplaints.textContent = String(rows.length);
+    return rows;
+  }
+
+  async function loadInspectionsForKnownStalls() {
+    const snap = await getDocs(collection(db, "inspections"));
+    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    const filtered = rows.filter(r => STALL_SET.has(norm(r.stallName)));
+
+    filtered.sort((a, b) => {
+      const da = tsToDate(a.createdAt)?.getTime() ?? 0;
+      const dbb = tsToDate(b.createdAt)?.getTime() ?? 0;
+      return dbb - da;
+    });
+
+    return filtered;
+  }
+
+  function buildLatestByStall(inspections) {
+    const map = new Map();
+    for (const it of inspections) {
+      const key = norm(it.stallName);
+      if (!key) continue;
+
+      const t = tsToDate(it.createdAt)?.getTime() ?? 0;
+      const prev = map.get(key);
+      const prevT = prev ? (tsToDate(prev.createdAt)?.getTime() ?? 0) : -1;
+
+      if (!prev || t > prevT) map.set(key, it);
+    }
+    return map;
+  }
+
+  function renderKPIs(latestByStall) {
+    if (elTotalStalls) elTotalStalls.textContent = String(CLEMENTI_STALLS.length);
+
+    const scores = [];
+    for (const stall of CLEMENTI_STALLS) {
+      const rec = latestByStall.get(norm(stall));
+      const s = Number(rec?.score);
+      if (Number.isFinite(s)) scores.push(s);
+    }
+
+    elAvgScore.textContent = scores.length
+      ? String(Math.round(scores.reduce((a,b)=>a+b,0) / scores.length))
+      : "—";
+  }
+
+  function renderGradePie(latestByStall) {
+    const counts = { A: 0, B: 0, C: 0, D: 0 };
+
+    for (const stall of CLEMENTI_STALLS) {
+      const rec = latestByStall.get(norm(stall));
+      if (!rec) continue;
+
+      const score = Number(rec.score ?? 0);
+      const grade = String(rec.grade || scoreToGrade(score)).trim().toUpperCase();
+      if (counts[grade] !== undefined) counts[grade]++;
+    }
+
+    if (pieChart) pieChart.destroy();
+    pieChart = new Chart(pieCanvas, {
+      type: "pie",
+      data: {
+        labels: ["A", "B", "C", "D"],
+        datasets: [{ data: [counts.A, counts.B, counts.C, counts.D] }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: "right" } }
+      }
+    });
+  }
+
+  function renderComplaintsLine(complaints) {
+    const { labels, keys } = lastNMonthsLabels(6);
+    const countsByMonth = Object.fromEntries(keys.map(k => [k, 0]));
+
+    for (const c of complaints) {
+      const d = tsToDate(c.createdAt);
+      if (!d) continue;
+      const k = monthKey(d);
+      if (countsByMonth[k] !== undefined) countsByMonth[k]++;
+    }
+
+    if (lineChart) lineChart.destroy();
+    lineChart = new Chart(lineCanvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Complaints",
+          data: keys.map(k => countsByMonth[k]),
+          tension: 0.25,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      }
+    });
+  }
+
+  function renderUnderperforming(latestByStall, complaints) {
+    const compCount = new Map();
+    const complaintStallDisplay = new Map();
+
+    for (const c of complaints) {
+      const key = norm(c.stallName);
+      if (!key) continue;
+      compCount.set(key, (compCount.get(key) || 0) + 1);
+
+      if (!complaintStallDisplay.has(key) && c.stallName) {
+        complaintStallDisplay.set(key, String(c.stallName).trim());
+      }
+    }
+
+    const allKeys = new Set([...STALL_SET, ...compCount.keys()]);
+
+    const rows = [];
+    for (const key of allKeys) {
+      const rec = latestByStall.get(key);
+
+      let grade = "-";
+      let score = null;
+
+      if (rec) {
+        const s = Number(rec.score);
+        score = Number.isFinite(s) ? s : null;
+        grade = String(rec.grade || (score !== null ? scoreToGrade(score) : "D")).trim().toUpperCase();
+        if (!["A","B","C","D"].includes(grade)) grade = "-";
+      }
+
+      const complaintsCount = compCount.get(key) || 0;
+
+      const displayName =
+        DISPLAY_NAME_BY_KEY.get(key) ||
+        complaintStallDisplay.get(key) ||
+        key;
+
+      rows.push({
+        stall: displayName,
+        grade,
+        score,
+        complaints: complaintsCount
+      });
+    }
+
+    rows.sort((a, b) => {
+      const gr = gradeRank(b.grade) - gradeRank(a.grade);
+      if (gr !== 0) return gr;
+
+      const cr = b.complaints - a.complaints;
+      if (cr !== 0) return cr;
+
+      const as = a.score ?? 999;
+      const bs = b.score ?? 999;
+      return as - bs;
+    });
+
+    const top = rows.slice(0, 3);
+
+    underTbody.innerHTML = "";
+    if (top.length === 0) {
+      underTbody.innerHTML = `<tr><td colspan="3" style="padding:14px;color:#666;">No data yet.</td></tr>`;
+      return;
+    }
+
+    for (const r of top) {
+      let gradeCell = "-";
+      if (["A","B","C","D"].includes(r.grade)) {
+        gradeCell = `<span class="grade-badge grade-${r.grade.toLowerCase()}">${r.grade}</span>`;
+      }
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.stall}</td>
+        <td class="centre">${gradeCell}</td>
+        <td class="centre">${r.complaints}</td>
+      `;
+      underTbody.appendChild(tr);
+    }
+  }
+
+  async function init() {
+    try {
+      const profile = await loadOperatorProfile();
+      if (!profile) return;
+
+      const complaints = await loadComplaints(profile.hawkerCentre);
+      const inspections = await loadInspectionsForKnownStalls();
+      const latestByStall = buildLatestByStall(inspections);
+
+      renderKPIs(latestByStall);
+      renderGradePie(latestByStall);
+      renderComplaintsLine(complaints);
+      renderUnderperforming(latestByStall, complaints);
+    } catch (err) {
+      console.error(err);
+      underTbody.innerHTML = `<tr><td colspan="3" style="padding:14px;color:#b00020;">Failed to load dashboard data.</td></tr>`;
+    }
+  }
+
+  init();
+})();
+

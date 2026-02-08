@@ -1,3 +1,6 @@
+/* =========================
+          NEA OFFICER
+   ========================= */
 /* ===== Overview Dashboard  ===== */
 /* header */
 .nav-bar{
@@ -511,4 +514,136 @@
   .filters-grid{
     grid-template-columns: 1fr;
   }
+}
+
+
+
+/* =========================
+          OPERATOR
+   ========================= */
+
+.op-main{
+  margin: 0;
+  padding: 22px 80px 40px;
+}
+
+.op-topbar{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.op-userbox{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.op-usertext{
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.op-username{
+  font-weight: 700;
+  color: #2f2f2f;
+}
+
+.op-centre{
+  font-size: 12px;
+  color: #666;
+}
+
+.op-logout{
+  border: 1px solid #c9c9c9;
+  background: #f6f6f6;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.op-logout:hover{ background: #ededed; }
+
+.op-kpi-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0 18px;
+}
+
+.op-kpi-card{
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.op-kpi-label{
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.op-kpi-value{
+  font-size: 34px;
+  font-weight: 800;
+  color: #2b2b2b;
+  line-height: 1;
+}
+
+.op-charts-grid{
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.op-card{
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.op-card-title{
+  padding: 12px 14px;
+  font-weight: 800;
+  color: #444;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.op-card-body{ padding: 14px; }
+
+.op-chart-wrap{ height: 260px; }
+.op-chart-wrap canvas{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.op-under{ margin-top: 8px; }
+
+.op-footnote{
+  text-align: center;
+  margin-top: 14px;
+  color: #666;
+}
+
+.op-footer{
+  padding: 18px 0 30px;
+  text-align: center;
+  color: #fff;
+  background: #7d9488;
+}
+
+@media (max-width: 900px){
+  .op-main{ padding: 18px 20px 30px; }
+  .op-kpi-grid{ grid-template-columns: 1fr; }
+  .op-charts-grid{ grid-template-columns: 1fr; }
+  .op-chart-wrap{ height: 240px; }
 }
